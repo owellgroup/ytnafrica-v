@@ -109,4 +109,7 @@ public class CompanyController {
             return ResponseEntity.badRequest().body("LogSheet deletion failed: " + e.getMessage());
         }
     }
+    //Get Company By Id
+
+    //Delete Company
 }

@@ -59,7 +59,7 @@ public class ArtistController {
             return ResponseEntity.badRequest().body("Profile retrieval failed: " + e.getMessage());
         }
     }
-    
+    //if this does not work than I will use @AuthenticationPrincipal, But this is for Admin
     @PutMapping("/profile/{id}")
     public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody MemberDetails memberDetails) {
         try {
@@ -69,7 +69,27 @@ public class ArtistController {
             return ResponseEntity.badRequest().body("Profile update failed: " + e.getMessage());
         }
     }
-    
+
+    //Updating for Users, why am i not using /profile/{id}
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateMyProfile(@RequestBody MemberDetails memberDetails,
+                                             @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = (User) userDetails;
+
+            // Fetch the current profile of the authenticated user
+            MemberDetails existingProfile = memberDetailsService.getMemberDetailsByUser(user);
+
+            // Update the existing profile with the new data
+            MemberDetails updatedProfile = memberDetailsService.updateMemberDetails(existingProfile.getId(), memberDetails);
+
+            return ResponseEntity.ok(updatedProfile);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Profile update failed: " + e.getMessage());
+        }
+    }
+
+
     @PostMapping("/passport-photo")
     public ResponseEntity<?> uploadPassportPhoto(@RequestParam MultipartFile file,
                                                @RequestParam String imageTitle,
@@ -144,7 +164,8 @@ public class ArtistController {
             return ResponseEntity.badRequest().body("Music retrieval failed: " + e.getMessage());
         }
     }
-    
+    //most used by admin
+    //if this does not work than I might remove aunthentication or not to get users documents, where admin or user
     @GetMapping("/documents")
     public ResponseEntity<?> getMyDocuments(@AuthenticationPrincipal UserDetails userDetails) {
         try {
@@ -163,7 +184,7 @@ public class ArtistController {
         }
     }
 
-    //the rest of the Controllers
+    //the rest of the Controllers more like for Admin
     //Get All members
     @GetMapping("/all")
     public List<MemberDetails> getAllMembers(){
@@ -182,5 +203,10 @@ public class ArtistController {
         memberDetailsService.deleteMemberDetailsById(id);
     }
 
-    //Update for the Documents
+    //Update for the Documents (ID)
+
+
+
+
+
 }
