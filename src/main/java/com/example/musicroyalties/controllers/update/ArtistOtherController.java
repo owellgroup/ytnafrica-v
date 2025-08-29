@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -83,8 +84,30 @@ public class ArtistOtherController {
     }
 
     @PutMapping("/updatemusic/{id}")
-    public ArtistWork updamusic(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id, @RequestParam("documentTitle") String documentTitle) throws Exception {
-        return musicService.updateMusic(id, file, documentTitle);
+    public ArtistWork updamusic(Long id, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
+                                @RequestParam String albumName,
+                                @RequestParam String artist,
+
+                                @RequestParam String GroupOrBandOrStageName,
+                                @RequestParam String featuredArtist,
+                                @RequestParam String producer,
+                                @RequestParam String country,
+                                @RequestParam LocalDate uploadedDate,
+                                @RequestParam Long artistUploadTypeId,
+                                @RequestParam Long artistWorkTypeId,
+                                @RequestParam String Duration,
+                                @RequestParam String composer,
+                                @RequestParam String author,
+                                @RequestParam String arranger,
+                                @RequestParam String publisher,
+                                @RequestParam String publishersName,
+                                @RequestParam String publisherAdress,
+                                @RequestParam String publisherTelephone,
+                                @RequestParam String recordedBy,
+                                @RequestParam String AddressOfRecordingCompany,
+                                @RequestParam String labelName,
+                                @RequestParam String dateRecorded) throws Exception {
+        return musicService.updateMusic(id,file, title, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
     }
 // End of the Part for the Admin Us
 // This Part is for Aunthenticated users to
@@ -92,7 +115,7 @@ public class ArtistOtherController {
 
 //Logged in Users//passport
 @PutMapping("/updatephotobyuser")
-public ResponseEntity<?> updatePassportPhoto(@RequestParam("file") MultipartFile file,
+public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") MultipartFile file,
                                              @RequestParam("imageTitle") String imageTitle,
                                              @AuthenticationPrincipal UserDetails userDetails) {
     try {
@@ -103,6 +126,8 @@ public ResponseEntity<?> updatePassportPhoto(@RequestParam("file") MultipartFile
                 .orElseThrow(() -> new RuntimeException("You don't have a passport photo yet"));
 
         // Update the photo
+
+        // PassportPhoto updatedPhoto = passportPhotoService.updatePhoto(existingPhoto.getId(), file, String.valueOf(id));
         PassportPhoto updatedPhoto = passportPhotoService.updatePhoto(existingPhoto.getId(), file, imageTitle);
         return ResponseEntity.ok(updatedPhoto);
 
@@ -181,7 +206,7 @@ public ResponseEntity<?> updatePassportPhoto(@RequestParam("file") MultipartFile
 
     }
 
-    //Update Id
+    //Update Id, not sure abiiut id
     @PutMapping("/updateuserid")
     public ResponseEntity<?> updateUserId (@RequestParam("file") MultipartFile file,@RequestParam("documentTitle") String documentTitle, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         User user = (User) userDetails;
@@ -225,6 +250,50 @@ public ResponseEntity<?> updatePassportPhoto(@RequestParam("file") MultipartFile
     public ResponseEntity<?> getProofOfPay(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
         User user = (User) userDetails;
         return ResponseEntity.ok(proofOfPaymentService.getByUserId(user.getId()));
+    }
+
+    //Music side
+    @PutMapping("/updatemusicbyuser")
+    public ResponseEntity<?> updatems (@AuthenticationPrincipal UserDetails userDetails, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
+                                       @RequestParam String albumName,
+                                       @RequestParam String artist,
+                                       @RequestParam String GroupOrBandOrStageName,
+                                       @RequestParam String featuredArtist,
+                                       @RequestParam String producer,
+                                       @RequestParam String country,
+                                       @RequestParam LocalDate uploadedDate,
+                                       @RequestParam Long artistUploadTypeId,
+                                       @RequestParam Long artistWorkTypeId,
+                                       @RequestParam String Duration,
+                                       @RequestParam String composer,
+                                       @RequestParam String author,
+                                       @RequestParam String arranger,
+                                       @RequestParam String publisher,
+                                       @RequestParam String publishersName,
+                                       @RequestParam String publisherAdress,
+                                       @RequestParam String publisherTelephone,
+                                       @RequestParam String recordedBy,
+                                       @RequestParam String AddressOfRecordingCompany,
+                                       @RequestParam String labelName,
+                                       @RequestParam String dateRecorded) {
+
+        try {
+            User user = (User) userDetails;
+            ArtistWork exist = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a music   yet"));
+            ArtistWork update = musicService.updateMusic(exist.getId(), file, title, ArtistId, albumName, GroupOrBandOrStageName, artist, featuredArtist, producer, country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress, publisherTelephone, recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
+            return ResponseEntity.ok(update);
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body("Music Update failed: " + e.getMessage());
+        }
+    }
+
+    //delete
+    @DeleteMapping("/deletemusicbyuserid}")
+    public ResponseEntity<?> deletemusic (@AuthenticationPrincipal UserDetails userDetails) throws Exception {
+        User user = (User) userDetails;
+        ArtistWork art = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have music  yet"));
+        musicService.deleteMusic(art.getId());
+        return ResponseEntity.ok().build();
     }
 
 }

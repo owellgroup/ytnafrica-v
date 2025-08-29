@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/company")
@@ -110,6 +111,13 @@ public class CompanyController {
         }
     }
     //Get Company By Id
-
+    @GetMapping("/getcompanybyid/{id}")
+    public Optional<Company> getCompanyById(@PathVariable Long id) {
+        return companyService.getCompanyById(id);
+    }
     //Delete Company
+    @DeleteMapping("/delete/{id}")
+    public void deleteCompanyById(@PathVariable Long id) {
+         companyService.deleteCompany(id);
+    }
 }

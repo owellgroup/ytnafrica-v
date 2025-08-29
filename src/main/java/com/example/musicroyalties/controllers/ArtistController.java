@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,18 +144,37 @@ public class ArtistController {
     }
     
     @PostMapping("/music/upload")
-    public ResponseEntity<?> uploadMusic(@RequestParam MultipartFile file,
-                                        @RequestParam String title,
-                                        @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> uploadMusic(@RequestParam MultipartFile file, @RequestParam String title, @AuthenticationPrincipal UserDetails userDetails, @RequestParam String ArtistId,
+                                         @RequestParam String albumName,
+                                         @RequestParam String artist,
+                                         @RequestParam String GroupOrBandOrStageName,
+                                         @RequestParam String featuredArtist,
+                                         @RequestParam String producer,
+                                         @RequestParam String country,
+                                         @RequestParam LocalDate uploadedDate,
+                                         @RequestParam Long artistUploadTypeId,
+                                         @RequestParam Long artistWorkTypeId,
+                                         @RequestParam String Duration,
+                                         @RequestParam String composer,
+                                         @RequestParam String author,
+                                         @RequestParam String arranger,
+                                         @RequestParam String publisher,
+                                         @RequestParam String publishersName,
+                                         @RequestParam String publisherAdress,
+                                         @RequestParam String publisherTelephone,
+                                         @RequestParam String recordedBy,
+                                         @RequestParam String AddressOfRecordingCompany,
+                                         @RequestParam String labelName,
+                                         @RequestParam String dateRecorded) {
         try {
             User user = (User) userDetails;
-            ArtistWork music = musicService.uploadMusic(file, title, user);
+            ArtistWork music = musicService.uploadMusic(file, title, user, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
             return ResponseEntity.ok(music);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Music upload failed: " + e.getMessage());
         }
     }
-    
+    //for users
     @GetMapping("/music")
     public ResponseEntity<?> getMyMusic(@AuthenticationPrincipal UserDetails userDetails) {
         try {

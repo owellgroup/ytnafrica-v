@@ -1,10 +1,10 @@
 package com.example.musicroyalties.services;
 
-import com.example.musicroyalties.models.ArtistWork;
-import com.example.musicroyalties.models.Status;
-import com.example.musicroyalties.models.User;
+import com.example.musicroyalties.models.*;
 import com.example.musicroyalties.repositories.ArtistWorkRepository;
 import com.example.musicroyalties.repositories.StatusRepository;
+import com.example.musicroyalties.services.lookupservices.ArtistUploadTypeService;
+import com.example.musicroyalties.services.lookupservices.ArtistWorkTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -31,11 +31,23 @@ public class MusicService {
     
     @Autowired
     private StatusRepository statusRepository;
+    @Autowired
+    private ArtistUploadTypeService artistUploadTypeService;
+    @Autowired
+    private ArtistWorkTypeService artistWorkTypeService;
+
     
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/music/";
-    
-    public ArtistWork uploadMusic(MultipartFile file, String title, User user) throws Exception {
+    //not sure about the memberId and status
+    public ArtistWork uploadMusic(MultipartFile file, String title, User user, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, LocalDate uploadedDate, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws Exception {
         String contentType = file.getContentType();
+
+        //calling Ids
+        ArtistUploadType artistUploadType = artistUploadTypeService.getArtistUploadTypeById(artistUploadTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
+        ArtistWorkType art = artistWorkTypeService.findWorkType(artistWorkTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
+        //custom ID Generation
+        String contentId = generateContentId(title, ArtistId, uploadedDate.getYear());
+
         
         // Allow only audio and video files
         if (contentType == null || (!contentType.startsWith("audio/") && !contentType.startsWith("video/"))) {
@@ -63,11 +75,36 @@ public class MusicService {
                 });
         
         ArtistWork music = new ArtistWork();
-        music.setTitleOfWork(title);
+        music.setRecordingCompanyTelephone(publisherTelephone);
+        music.setLabelName(labelName);
+        music.setUploadedDate(uploadedDate);
+        music.setDateRecorded(dateRecorded);
+        music.setWorkId(contentId);
+        music.setArranger(arranger);
+        music.setPublishersName(publishersName);
+        music.setArtist(artist);
+        music.setAuthor(author);
+        music.setAlbumName(albumName);
+        music.setArtistId(ArtistId);
+        music.setFeaturedArtist(featuredArtist);
+        music.setProducer(producer);
+        music.setCountry(country);
+        music.setDuration(Duration);
+        music.setComposer(composer);
+        music.setPublisher(publisher);
+        music.setPublisherAdress(publisherAdress);
+        music.setPublisherTelephone(publisherTelephone);
+        music.setRecordedBy(recordedBy);
+        music.setAddressOfRecordingCompany(AddressOfRecordingCompany);
+        music.setGroupOrBandOrStageName(GroupOrBandOrStageName);
+        music.setTitle(title);
         music.setFileUrl(fileUrl);
         music.setFileType(contentType);
-        music.setUploadedDate(LocalDate.now());
+        music.setArtistUploadType(artistUploadType);
+        music.setArtistWorkType(art);
+        //music.setUploadedDate(LocalDate.now());
         music.setUser(user);
+
         music.setStatus(pendingStatus);
         
         return artistWorkRepository.save(music);
@@ -131,10 +168,18 @@ public class MusicService {
     public Optional<ArtistWork> getMusicById(Long id) {
         return artistWorkRepository.findById(id);
     }
+
+    public Optional<ArtistWork> getByUserId (Long userId) {
+        return artistWorkRepository.findById(userId);
+    }
     
-    public ArtistWork updateMusic(Long id, MultipartFile file, String title) throws IOException {
+    public ArtistWork updateMusic(Long id, MultipartFile file, String title, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, LocalDate uploadedDate, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws IOException {
         ArtistWork music = artistWorkRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Music not found"));
+
+        //Calling the ids for work type and Upload
+        ArtistUploadType artistUploadType = artistUploadTypeService.getArtistUploadTypeById(artistUploadTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
+        ArtistWorkType art = artistWorkTypeService.findWorkType(artistWorkTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
         
         if (file != null && !file.isEmpty()) {
             String contentType = file.getContentType();
@@ -153,13 +198,58 @@ public class MusicService {
             music.setFileType(contentType);
             music.setFileUrl(fileUrl);
         }
-        
-        music.setTitleOfWork(title);
-        music.setUploadedDate(LocalDate.now());
+
+        music.setRecordingCompanyTelephone(publisherTelephone);
+        music.setLabelName(labelName);
+        music.setUploadedDate(uploadedDate);
+        music.setDateRecorded(dateRecorded);
+        music.setArranger(arranger);
+        music.setPublishersName(publishersName);
+        music.setArtist(artist);
+        music.setAuthor(author);
+        music.setAlbumName(albumName);
+        music.setArtistId(ArtistId);
+        music.setFeaturedArtist(featuredArtist);
+        music.setProducer(producer);
+        music.setCountry(country);
+        music.setDuration(Duration);
+        music.setComposer(composer);
+        music.setPublisher(publisher);
+        music.setPublisherAdress(publisherAdress);
+        music.setPublisherTelephone(publisherTelephone);
+        music.setRecordedBy(recordedBy);
+        music.setAddressOfRecordingCompany(AddressOfRecordingCompany);
+        music.setGroupOrBandOrStageName(GroupOrBandOrStageName);
+        music.setTitle(title);
+        music.setArtistUploadType(artistUploadType);
+        music.setArtistWorkType(art);
+        //music.setUploadedDate(LocalDate.now());
+
         return artistWorkRepository.save(music);
     }
     
     public void deleteMusic(Long id) {
         artistWorkRepository.deleteById(id);
     }
+
+    //Id Generation Methods
+    //customes Ids generating
+    //String contentId = generateContentId(title, ArtistId, uploadedDate.getYear());
+    private String generateContentId(String tittle, String ArtistId, int uploadedDate) {
+        String prefix = "NAM";
+        String lastNamePart = tittle.length() >= 2 ? tittle.substring(0, 2).toUpperCase() : tittle.toUpperCase();
+        String lastNamePart2 = ArtistId.length() >= 2 ? ArtistId.substring(0, 2).toUpperCase() : ArtistId.toUpperCase();
+        String yearPart = String.valueOf(uploadedDate).substring(2);
+        //method
+
+        // Get the current count of members from the database and add 1
+        Long count = artistWorkRepository.count() + 1;
+
+        // Format the count with leading zeros (e.g., 001, 002, ..., 1000)
+        String counterPart = String.format("%01d", count);
+
+
+        return prefix + lastNamePart + yearPart + lastNamePart2 +  counterPart;
+    }
+
 }
