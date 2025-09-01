@@ -1,16 +1,24 @@
 package com.example.musicroyalties.services;
 
+import com.example.musicroyalties.models.invoiceAndPayments.Invoice;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class EmailService {
     
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private PdfInvoiceGenerator pdfInvoiceGenerator;
+
+    private static final String LOGO_URL = "https://ytnafrica.ggff.net/images/ytnlogo.png";
     
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -199,4 +207,131 @@ public class EmailService {
             throw new RuntimeException("Failed to send verification email", e);
         }
     }
+
+    // invoice pdf
+    public void sendInvoiceEmail(String clientEmail, Invoice invoice) {
+        String subject = "Invoice #" + invoice.getInvoiceNumber() + " - YTNAFRICA ";
+
+        String htmlBody = buildInvoiceHtml(invoice);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true); // multipart
+
+            helper.setTo(clientEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true); // HTML
+
+            // Attach PDF
+            byte[] pdfBytes = pdfInvoiceGenerator.generatePdf(invoice);
+            helper.addAttachment("Invoice_" + invoice.getInvoiceNumber() + ".pdf",
+                    new ByteArrayResource(pdfBytes));
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send invoice email", e);
+        }
+    }
+
+    private String buildInvoiceHtml(Invoice invoice) {
+        return """
+            <div style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
+                <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #8a2be2;'>
+                    <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain;' />
+                    <h1 style='color: #333; margin: 10px 0;'>INVOICE</h1>
+                </div>
+
+                <div style='padding: 25px; color: #333; line-height: 1.7; font-size: 15px;'>
+
+                    <!-- Company & Client Info -->
+                    <table width='100%%' style='margin-bottom: 25px;'>
+                        <tr>
+                            <td width='50%%'>
+                                <strong>From:</strong><br/>
+                                <strong>YTNAfrica / NASCAM</strong><br/>
+                                %s<br/>
+                                Phone: %s<br/>
+                                Email: %s<br/>
+                                Contact: %s
+                            </td>
+                            <td width='50%%' style='text-align: right;'>
+                                <strong>Bill To:</strong><br/>
+                                <strong>%s</strong><br/>
+                                %s<br/>
+                                Phone: %s<br/>
+                                Email: %s
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Invoice Details -->
+                    <table width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
+                        <tr>
+                            <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Invoice #</th>
+                            <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Date</th>
+                            <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Service</th>
+                        </tr>
+                        <tr>
+                            <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                            <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                            <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                        </tr>
+                    </table>
+
+                    <!-- Amounts -->
+                    <table width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
+                        <tr style='background-color: #f9f9f9;'>
+                            <td style='padding: 10px;'><strong>Units Used:</strong> %d</td>
+                            <td style='padding: 10px;'><strong>Unit Price:</strong> N$%s</td>
+                        </tr>
+                        <tr>
+                            <td style='padding: 10px;'><strong>Total Amount:</strong> N$%s</td>
+                            <td style='padding: 10px;'><strong>Net Amount:</strong> N$%s</td>
+                        </tr>
+                    </table>
+
+                    <!-- Bank Info -->
+                    <div style='background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;'>
+                        <strong>Payment Instructions:</strong><br/>
+                        Bank: %s<br/>
+                        Branch: %s<br/>
+                        Account Number: %d
+                    </div>
+
+                    <!-- Footer -->
+                    <div style='text-align: center; padding: 15px; color: #777; font-size: 13px; border-top: 1px solid #eee; margin-top: 20px;'>
+                        <p>&copy; 2025 ytnafrica. All rights reserved.</p>
+                        <p>If you have questions, contact <a href='mailto:support@ytnafrica.com' style='color: #8a2be2;'>support@ytnafrica.com</a></p>
+                    </div>
+                </div>
+            </div>
+            """.formatted(
+                LOGO_URL,
+                invoice.getCompanyAddress(),
+                invoice.getCompanyPhone(),
+                invoice.getCompanyEmail(),
+                invoice.getContactPerson(),
+                invoice.getBillingToCompanyName(),
+                invoice.getBillingToCompanyAddress(),
+                invoice.getBillingToCompanyPhone(),
+                invoice.getBillingToCompanyEmail(),
+                invoice.getInvoiceNumber(),
+                invoice.getInvoiceDate(),
+                invoice.getInvoiceServiceType(),
+                invoice.getTotalUsed(),
+                format(invoice.getUnitPrice()),
+                format(invoice.getTotalAmount()),
+                format(invoice.getTotalNetAmount()),
+                invoice.getBankName(),
+                invoice.getBranchName(),
+                invoice.getAccountNumber()
+        );
+    }
+
+    private String format(Double value) {
+        if (value == null) return "0.00";
+        return String.format("%.2f", value);
+    }
+
+    //
 }

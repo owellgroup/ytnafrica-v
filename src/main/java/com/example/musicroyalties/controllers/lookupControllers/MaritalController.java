@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RequestMapping("/api/martial")
 @RestController
+@CrossOrigin(origins = "*")
 public class MaritalController {
     @Autowired
     private MaritalService  maritalService;

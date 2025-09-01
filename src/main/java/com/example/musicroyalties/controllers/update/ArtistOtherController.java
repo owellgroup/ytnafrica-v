@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/artist2/")
+@CrossOrigin(origins = "*")
 
 public class ArtistOtherController {
     @Autowired
@@ -288,7 +289,7 @@ public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") 
     }
 
     //delete
-    @DeleteMapping("/deletemusicbyuserid}")
+    @DeleteMapping("/deletemusicbyuserid")
     public ResponseEntity<?> deletemusic (@AuthenticationPrincipal UserDetails userDetails) throws Exception {
         User user = (User) userDetails;
         ArtistWork art = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have music  yet"));

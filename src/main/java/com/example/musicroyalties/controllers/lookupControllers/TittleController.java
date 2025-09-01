@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tittle")
+@CrossOrigin(origins = "*")
 public class TittleController {
     @Autowired
     private TitleService titleService;

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/members")
+@CrossOrigin(origins = "*")
 public class MemberController {
     @Autowired
     private MemberService memberService;

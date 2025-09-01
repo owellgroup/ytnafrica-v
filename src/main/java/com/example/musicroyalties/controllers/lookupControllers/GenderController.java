@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RequestMapping("/api/gender")
 @RestController
+@CrossOrigin(origins = "*")
 public class GenderController {
     @Autowired
     private GenderService genderService;
