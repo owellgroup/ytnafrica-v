@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -27,44 +29,16 @@ public class InvoiceController {
 
     }
 
-    /**
-     * POST /api/invoices
-     * Save a new invoice to the database.
-     */
-    @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@Valid @RequestBody Invoice invoice) {
-        // TODO: Save to DB using repository (e.g., invoiceRepository.save(invoice))
-        // For now, echoing back
-        return ResponseEntity.created(URI.create("/api/invoices/" + 1L)).body(invoice);
+    //get All the Invoices
+    @GetMapping("/all")
+    public List<Invoice> getAllInvoices() {
+        return invoiceService.getAllInvoices();
     }
 
-    /**
-     * GET /api/invoices/{id}
-     * Retrieve an invoice by ID.
-     */
+    //Get By Id
     @GetMapping("/{id}")
-    public ResponseEntity<Invoice> getInvoice(@PathVariable Long id) {
-        // TODO: Fetch from DB
-        return ResponseEntity.notFound().build(); // Placeholder
+    public Optional<Invoice> getInvoice(@PathVariable long id) {
+        return invoiceService.getInvoice(id);
     }
 
-    /**
-     * PUT /api/invoices/{id}
-     * Update an existing invoice.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @Valid @RequestBody Invoice invoice) {
-        // TODO: Update logic
-        return ResponseEntity.ok(invoice);
-    }
-
-    /**
-     * DELETE /api/invoices/{id}
-     * Delete an invoice.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
-        // TODO: Delete from DB
-        return ResponseEntity.noContent().build();
-    }
 }

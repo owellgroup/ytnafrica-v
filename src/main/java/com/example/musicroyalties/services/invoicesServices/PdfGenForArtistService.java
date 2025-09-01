@@ -1,7 +1,8 @@
-// src/main/java/com/example/musicroyalties/services/PdfInvoiceGenerator.java
+package com.example.musicroyalties.services.invoicesServices;// src/main/java/com/example/musicroyalties/services/PdfInvoiceGenerator.java
 
-package com.example.musicroyalties.services;
 
+
+import com.example.musicroyalties.models.invoiceAndPayments.ArtistInvoiceReports;
 import com.example.musicroyalties.models.invoiceAndPayments.Invoice;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -20,11 +21,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Service
-public class PdfInvoiceGenerator {
+public class PdfGenForArtistService {
 
     private static final String LOGO_URL = "https://ytnafrica.ggff.net/images/ytnlogo.png";
 
-    public byte[] generatePdf(Invoice invoice) {
+    public byte[] generatePdf(ArtistInvoiceReports artistinvoice) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             // Set up PDF writer and document
             PdfWriter writer = new PdfWriter(outputStream);
@@ -34,15 +35,15 @@ public class PdfInvoiceGenerator {
             // Add Logo and Title
             ImageData imageData = ImageDataFactory.create(LOGO_URL);
             Image logo = new Image(imageData).setWidth(120); // Adjust size as needed
-            logo.setHorizontalAlignment(HorizontalAlignment.LEFT);
+            logo.setHorizontalAlignment(HorizontalAlignment.RIGHT);
             document.add(logo);
 
             // Invoice Title
-            Paragraph title = new Paragraph("INVOICE")
+            Paragraph title = new Paragraph("Proof of Payments")
                     .setFontSize(24)
                     .setBold()
                     .setFontColor(ColorConstants.DARK_GRAY)
-                    .setTextAlignment(TextAlignment.LEFT)
+                    .setTextAlignment(TextAlignment.RIGHT)
                     .setBackgroundColor(ColorConstants.LIGHT_GRAY)
                     .setMarginTop(10f);
             document.add(title);
@@ -58,19 +59,19 @@ public class PdfInvoiceGenerator {
             Cell fromCell = new Cell().setBorder(null);
             fromCell.add(new Paragraph("From:").setBold());
             fromCell.add(new Paragraph("YTNAfrica / NASCAM"));
-            fromCell.add(new Paragraph(invoice.getCompanyAddress()));
-            fromCell.add(new Paragraph("Phone: " + invoice.getCompanyPhone()));
-            fromCell.add(new Paragraph("Email: " + invoice.getCompanyEmail()));
-            fromCell.add(new Paragraph("Contact: " + invoice.getContactPerson()));
+            fromCell.add(new Paragraph(artistinvoice.getCompanyAddress()));
+            fromCell.add(new Paragraph("Phone: " + artistinvoice.getCompanyPhone()));
+            fromCell.add(new Paragraph("Email: " + artistinvoice.getCompanyEmail()));
+            fromCell.add(new Paragraph("Contact: " + artistinvoice.getContactPerson()));
             headerTable.addCell(fromCell);
 
-            // BILL TO (Client)
+            // payments TO (Client)
             Cell billToCell = new Cell().setBorder(null);
-            billToCell.add(new Paragraph("Bill To:").setBold());
-            billToCell.add(new Paragraph(invoice.getBillingToCompanyName()));
-            billToCell.add(new Paragraph(invoice.getBillingToCompanyAddress()));
-            billToCell.add(new Paragraph("Phone: " + invoice.getBillingToCompanyPhone()));
-            billToCell.add(new Paragraph("Email: " + invoice.getBillingToCompanyEmail()));
+            billToCell.add(new Paragraph("Payments To:").setBold());
+            billToCell.add(new Paragraph(artistinvoice.getArtistName()));
+            billToCell.add(new Paragraph(artistinvoice.getArtistPhoneNumber()));
+            billToCell.add(new Paragraph("Email: " + artistinvoice.getCompanyEmail()));
+            billToCell.add(new Paragraph("ArtistID: " + artistinvoice.getArtistId()));
             headerTable.addCell(billToCell);
 
             document.add(headerTable);
@@ -78,13 +79,13 @@ public class PdfInvoiceGenerator {
             // Invoice Details Table (Single row: Number, Date, Service)
             Table infoTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
             infoTable.setMarginTop(20);
-            infoTable.addHeaderCell(createHeaderCell("Invoice Number"));
+            infoTable.addHeaderCell(createHeaderCell("Payment Number"));
             infoTable.addHeaderCell(createHeaderCell("Date"));
             infoTable.addHeaderCell(createHeaderCell("Service"));
 
-            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(invoice.getInvoiceNumber())));
-            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(invoice.getInvoiceDate())));
-            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(invoice.getInvoiceServiceType())));
+            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(artistinvoice.getPaymentId())));
+            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(artistinvoice.getPaymentDate())));
+            infoTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(artistinvoice.getDesciption())));
 
             document.add(infoTable);
 
@@ -98,10 +99,10 @@ public class PdfInvoiceGenerator {
             itemTable.addHeaderCell(createHeaderCell("Total (NAD)"));
 
             // Add service row
-            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.LEFT).add(new Paragraph(invoice.getInvoiceServiceType())));
-            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(String.valueOf(invoice.getTotalUsed()))));
-            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.RIGHT).add(new Paragraph("N$" + format(invoice.getUnitPrice()))));
-            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.RIGHT).add(new Paragraph("N$" + format(invoice.getTotalAmount()))));
+            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.LEFT).add(new Paragraph(artistinvoice.getDesciption())));
+            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.CENTER).add(new Paragraph(String.valueOf(artistinvoice.getTotalplayed()))));
+            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.RIGHT).add(new Paragraph("N$" + format(artistinvoice.getUnitPrice()))));
+            itemTable.addCell(new Cell().setTextAlignment(TextAlignment.RIGHT).add(new Paragraph("N$" + format(artistinvoice.getTotalEarned()))));
 
             // Net Amount Row
             itemTable.addCell(new Cell(1, 3) // colspan 3
@@ -113,32 +114,27 @@ public class PdfInvoiceGenerator {
             itemTable.addCell(new Cell()
                     .setBorderTop(null)
                     .setTextAlignment(TextAlignment.RIGHT)
-                    .add(new Paragraph("N$" + format(invoice.getTotalNetAmount())).setBold()));
+                    .add(new Paragraph("N$" + format(artistinvoice.getTotalNetpaid())).setBold()));
 
             document.add(itemTable);
 
             // Payment Instructions
             document.add(new Paragraph("\nPayment Instructions").setBold().setMarginTop(20));
-            document.add(new Paragraph("Bank: " + invoice.getBankName()));
-            document.add(new Paragraph("Branch: " + invoice.getBranchName()));
-            document.add(new Paragraph("Account Number: " + invoice.getAccountNumber()));
+            document.add(new Paragraph("Bank: " + artistinvoice.getBankName()));
+            document.add(new Paragraph("Branch: " + artistinvoice.getAccountNumber()));
+            document.add(new Paragraph("Account Number: " + artistinvoice.getBranchName()));
 
             // Terms & Conditions
             document.add(new Paragraph("\nTerms & Conditions").setBold().setMarginTop(20));
             document.add(new Paragraph(
-                    "1. Payment is due within 15 days of the invoice date.\n" +
-                            "2. Late payments may be subject to a finance charge.\n" +
-                            "3. All services are provided as per the agreement between YTNAfrica / NASCAM and the client.\n" +
-                            "4. This invoice is valid for payment upon approval of the associated music royalty usage."
+                    "1. This report is provided for informational purposes and reflects transactions recorded up to the report date.\n" +
+                            "2. Final payment amounts are subject to contract terms, adjustments, and applicable taxes.\n" +
+                            "3. The report is confidential and intended solely for the artist; unauthorized sharing is prohibited.\n" +
+                            "4. Any discrepancies must be reported within 14 days of receipt"
             ).setFontSize(10).setFontColor(ColorConstants.GRAY));
 
-            // Footer
-            document.add(new Paragraph("\nThank you for your business!")
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setItalic()
-                    .setMarginTop(30)
-                    .setFontColor(ColorConstants.BLUE)
-                    .setFontSize(12));
+
+
 
             // Close document
             document.close();

@@ -1,6 +1,8 @@
 package com.example.musicroyalties.services;
 
+import com.example.musicroyalties.models.invoiceAndPayments.ArtistInvoiceReports;
 import com.example.musicroyalties.models.invoiceAndPayments.Invoice;
+import com.example.musicroyalties.services.invoicesServices.PdfGenForArtistService;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -210,7 +212,7 @@ public class EmailService {
 
     // invoice pdf
     public void sendInvoiceEmail(String clientEmail, Invoice invoice) {
-        String subject = "Invoice #" + invoice.getInvoiceNumber() + " - YTNAFRICA ";
+        String subject = "Invoice Number - " + invoice.getInvoiceNumber() + " - YTNAFRICA ";
 
         String htmlBody = buildInvoiceHtml(invoice);
 
@@ -364,6 +366,146 @@ public class EmailService {
         if (value == null) return "0.00";
         return String.format("%.2f", value);
     }
+
+    //
+
+    //send email for payments
+    // artist payment pdf
+    public void sendPayment(String artistEmail, ArtistInvoiceReports artistInvoice) {
+        String subject = "Payment Report - " + artistInvoice.getPaymentId() + " - YTNAFRICA ";
+
+        String htmlBody = buildArtistPaymentHtml(artistInvoice);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true); // multipart
+
+            helper.setTo(artistEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true); // HTML
+
+            // Attach PDF
+            byte[] pdfBytes = new PdfGenForArtistService().generatePdf(artistInvoice);
+            helper.addAttachment("PaymentReport_" + artistInvoice.getPaymentId() + ".pdf",
+                    new ByteArrayResource(pdfBytes));
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send artist payment email", e);
+        }
+    }
+
+    private String buildArtistPaymentHtml(ArtistInvoiceReports artistInvoice) {
+        return """
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            body, table, td, a { -webkit-text-size-adjust: 100%%; -ms-text-size-adjust: 100%%; }
+            table { border-collapse: collapse !important; }
+            img { border: 0; height: auto; line-height: 100%%; outline: none; text-decoration: none; max-width: 100%%; }
+            body { margin: 0 !important; padding: 0 !important; width: 100%% !important; }
+            @media screen and (max-width: 600px) {
+                .container { width: 100%% !important; padding: 15px !important; }
+                .stack { display: block !important; width: 100%% !important; text-align: left !important; }
+            }
+        </style>
+    </head>
+    <body style='background-color: #f9f9f9; margin: 0; padding: 0;'>
+        <div class="container" style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
+            <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #8a2be2;'>
+                <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain; max-width: 100%%;' />
+                <h1 style='color: #333; margin: 10px 0; font-size: 24px;'>Proof of Payment</h1>
+            </div>
+
+            <div style='padding: 25px; color: #333; line-height: 1.6; font-size: 15px;'>
+                <!-- Company & Artist Info -->
+                <table width='100%%' style='margin-bottom: 25px;'>
+                    <tr>
+                        <td class="stack" width='50%%' style='vertical-align: top; padding-right: 10px;'>
+                            <strong>From:</strong><br/>
+                            <strong>YTNAfrica / NASCAM</strong><br/>
+                            %s<br/>
+                            Phone: %s<br/>
+                            Email: %s<br/>
+                            Contact: %s
+                        </td>
+                        <td class="stack" width='50%%' style='text-align: right; vertical-align: top;'>
+                            <strong>Payments To:</strong><br/>
+                            <strong>%s</strong><br/>
+                            Phone: %s<br/>
+                            Email: %s<br/>
+                            Artist ID: %s
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Payment Details -->
+                <table width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
+                    <tr>
+                        <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Payment #</th>
+                        <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Date</th>
+                        <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Description</th>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                        <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                        <td style='padding: 8px; border-bottom: 1px solid #eee;'>%s</td>
+                    </tr>
+                </table>
+
+                <!-- Amounts -->
+                <table width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
+                    <tr style='background-color: #f9f9f9;'>
+                        <td style='padding: 10px;'><strong>Quantity:</strong> %s</td>
+                        <td style='padding: 10px;'><strong>Unit Price:</strong> N$%s</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 10px;'><strong>Total Earned:</strong> N$%s</td>
+                        <td style='padding: 10px;'><strong>Net Paid:</strong> N$%s</td>
+                    </tr>
+                </table>
+
+                <!-- Bank Info -->
+                <div style='background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;'>
+                    <strong>Payment Instructions:</strong><br/>
+                    Bank: %s<br/>
+                    Branch: %s<br/>
+                    Account Number: %d
+                </div>
+
+                <!-- Footer -->
+                <div style='text-align: center; padding: 15px; color: #777; font-size: 13px; border-top: 1px solid #eee; margin-top: 20px;'>
+                    <p>&copy; 2025 ytnafrica. All rights reserved.</p>
+                    <p>If you have questions, contact <a href='mailto:support@ytnafrica.com' style='color: #8a2be2;'>support@ytnafrica.com</a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    """.formatted(
+                LOGO_URL,
+                artistInvoice.getCompanyAddress(),
+                artistInvoice.getCompanyPhone(),
+                artistInvoice.getCompanyEmail(),
+                artistInvoice.getContactPerson(),
+                artistInvoice.getArtistName(),
+                artistInvoice.getArtistPhoneNumber(),
+                artistInvoice.getArtistEmail(),
+                artistInvoice.getArtistId(),
+                artistInvoice.getPaymentId(),
+                artistInvoice.getPaymentDate(),
+                artistInvoice.getDesciption(),
+                artistInvoice.getTotalplayed(),
+                format(artistInvoice.getUnitPrice()),
+                format(artistInvoice.getTotalEarned()),
+                format(artistInvoice.getTotalNetpaid()),
+                artistInvoice.getBankName(),
+                artistInvoice.getBranchName(),
+                artistInvoice.getAccountNumber()
+        );
+    }
+
 
     //
 }

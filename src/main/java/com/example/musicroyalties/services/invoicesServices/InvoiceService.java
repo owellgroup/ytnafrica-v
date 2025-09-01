@@ -6,6 +6,9 @@ import com.example.musicroyalties.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class InvoiceService {
     @Autowired
@@ -33,11 +36,22 @@ public class InvoiceService {
         Long count = invoiceRepository.count() + 1;
 
         // Format the count with leading zeros (e.g., 001, 002, ..., 1000)
-        String counterPart = String.format("%01d", count);
+        String counterPart = String.format("%04d", count);
 
 
         return prefix + lastNamePart  + lastNamePart2 +  counterPart;
     }
+
+    //get all invoices
+    public List<Invoice> getAllInvoices() {
+        return invoiceRepository.findAll();
+    }
+
+    //find by Id
+    public Optional<Invoice> getInvoice(Long id) {
+        return invoiceRepository.findById(id);
+    }
+
 
 
 }
