@@ -235,18 +235,47 @@ public class EmailService {
 
     private String buildInvoiceHtml(Invoice invoice) {
         return """
-            <div style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <style>
+                /* Reset */
+                body, table, td, a { -webkit-text-size-adjust: 100%%; -ms-text-size-adjust: 100%%; }
+                table { border-collapse: collapse !important; }
+                img { border: 0; height: auto; line-height: 100%%; outline: none; text-decoration: none; max-width: 100%%; }
+                body { margin: 0 !important; padding: 0 !important; width: 100%% !important; }
+
+                /* Responsive */
+                @media screen and (max-width: 600px) {
+                    .container {
+                        width: 100%% !important;
+                        padding: 15px !important;
+                    }
+                    .stack {
+                        display: block !important;
+                        width: 100%% !important;
+                        text-align: left !important;
+                    }
+                    .invoice-table th, .invoice-table td {
+                        font-size: 13px !important;
+                        padding: 6px !important;
+                    }
+                }
+            </style>
+        </head>
+        <body style='background-color: #f9f9f9; margin: 0; padding: 0;'>
+            <div class="container" style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
                 <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #8a2be2;'>
-                    <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain;' />
-                    <h1 style='color: #333; margin: 10px 0;'>INVOICE</h1>
+                    <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain; max-width: 100%%;' />
+                    <h1 style='color: #333; margin: 10px 0; font-size: 24px;'>INVOICE</h1>
                 </div>
 
-                <div style='padding: 25px; color: #333; line-height: 1.7; font-size: 15px;'>
+                <div style='padding: 25px; color: #333; line-height: 1.6; font-size: 15px;'>
 
                     <!-- Company & Client Info -->
                     <table width='100%%' style='margin-bottom: 25px;'>
                         <tr>
-                            <td width='50%%'>
+                            <td class="stack" width='50%%' style='vertical-align: top; padding-right: 10px;'>
                                 <strong>From:</strong><br/>
                                 <strong>YTNAfrica / NASCAM</strong><br/>
                                 %s<br/>
@@ -254,7 +283,7 @@ public class EmailService {
                                 Email: %s<br/>
                                 Contact: %s
                             </td>
-                            <td width='50%%' style='text-align: right;'>
+                            <td class="stack" width='50%%' style='text-align: right; vertical-align: top;'>
                                 <strong>Bill To:</strong><br/>
                                 <strong>%s</strong><br/>
                                 %s<br/>
@@ -265,7 +294,7 @@ public class EmailService {
                     </table>
 
                     <!-- Invoice Details -->
-                    <table width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
+                    <table class="invoice-table" width='100%%' style='margin-bottom: 25px; border-collapse: collapse;'>
                         <tr>
                             <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Invoice #</th>
                             <th style='text-align: left; padding: 8px; background-color: #f5f5f5;'>Date</th>
@@ -305,7 +334,9 @@ public class EmailService {
                     </div>
                 </div>
             </div>
-            """.formatted(
+        </body>
+        </html>
+        """.formatted(
                 LOGO_URL,
                 invoice.getCompanyAddress(),
                 invoice.getCompanyPhone(),
@@ -327,6 +358,7 @@ public class EmailService {
                 invoice.getAccountNumber()
         );
     }
+
 
     private String format(Double value) {
         if (value == null) return "0.00";
