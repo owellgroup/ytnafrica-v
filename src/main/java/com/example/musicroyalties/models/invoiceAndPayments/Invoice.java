@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -45,4 +47,5 @@ public class Invoice {
     private int accountNumber;
     private String bankName;
     private String branchName;
+    private LocalDate datecreated;
 }

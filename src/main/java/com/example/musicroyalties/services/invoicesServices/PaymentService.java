@@ -6,6 +6,7 @@ import com.example.musicroyalties.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class PaymentService {
     public ArtistInvoiceReports send(ArtistInvoiceReports invoice, String clientEmail) throws Exception {
         String userId = generateUserId(invoice.getBankName(), invoice.getArtistName());
         invoice.setPaymentId(userId);
+        invoice.setDatecreated(LocalDate.now());
         ArtistInvoiceReports save = artistInvoiceReportsRepository.save(invoice);
         emailService.sendPayment(clientEmail, save);
         return save;

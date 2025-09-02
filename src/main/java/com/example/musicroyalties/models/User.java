@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private String verificationToken;
     
     public enum Role {
-        ARTIST, COMPANY, ADMIN
+        ARTIST, COMPANY, ADMIN, RECORDING
     }
     
     @Override

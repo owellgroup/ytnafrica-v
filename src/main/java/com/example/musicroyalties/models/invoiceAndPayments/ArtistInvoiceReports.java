@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,5 +41,6 @@ public class ArtistInvoiceReports {
     private String BankName;
     private int AccountNumber;
     private String branchName;
+    private LocalDate datecreated;
 
 }

@@ -29,6 +29,8 @@ public class MemberDetails {
     @Column(nullable = false)
     private String surname;
 
+    private int idNumber;
+
     @Column(unique = true)
     private String ArtistId;
     

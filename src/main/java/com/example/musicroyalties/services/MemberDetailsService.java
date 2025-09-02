@@ -146,6 +146,11 @@ public class MemberDetailsService {
         existingMember.setBankBranchName(memberDetails.getBankBranchName());
         existingMember.setBankBranchNumber(memberDetails.getBankBranchNumber());
         existingMember.setTittle(memberDetails.getTittle());
+        existingMember.setEmail(memberDetails.getEmail());
+        existingMember.setIPI_number(memberDetails.getIPI_number());
+        existingMember.setIdNumber(memberDetails.getIdNumber());
+        existingMember.setNotes(memberDetails.getNotes());
+
         
         return memberDetailsRepository.save(existingMember);
     }
