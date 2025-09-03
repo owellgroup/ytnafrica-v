@@ -177,5 +177,6 @@ public class MemberDetailsService {
 
         return prefix + lastNamePart + yearPart + lastNamePart2 +  counterPart;
     }
+    //WHAT
 
 }
