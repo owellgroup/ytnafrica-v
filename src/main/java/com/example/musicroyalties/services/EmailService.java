@@ -89,16 +89,65 @@ public class EmailService {
         }
     }
 
-
+    /**
+     * Sends a styled HTML email notification for music file rejection.
+     */
     public void sendMusicRejectionEmail(String email, String notes) {
         String subject = "Music File Rejection Notification";
-        String body = "Dear Artist,\n\n" +
-                     "Your music file has been rejected by the administrator.\n\n" +
-                     "Reason: " + notes + "\n\n" +
-                     "Please review and resubmit your music file with the necessary corrections.\n\n" +
-                     "Best regards,\nMusic Royalties System";
-        sendEmail(email, subject, body);
+        String logoUrl = "https://ytnafrica.ggff.net/images/ytnlogo.png"; // Ensure no extra spaces
+        String resubmitLink = "http://localhost:8080/artist/music/resubmit"; // Update with your actual link
+
+        String htmlBody =
+                "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #fff8f8;'>" +
+                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #e86d6d;'>" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "</div>" +
+
+                        "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
+                        "<h2 style='color: #cc0000; margin-top: 0;'>Dear Artist,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>We regret to inform you that your music submission has been <strong>rejected</strong> by the administrator.</p>" +
+
+                        "<p style='font-size: 16px; color: #cc0000;'><strong>Reason:</strong> " + notes + "</p>" +
+
+                        "<p style='font-size: 16px;'>Please review the feedback above, make the necessary corrections, and resubmit your track.</p>" +
+
+                        "<div style='text-align: center; margin: 30px 0;'>" +
+                        "<a href='" + resubmitLink + "' " +
+                        "style='background-color: #cc0000; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                        "Resubmit Music" +
+                        "</a>" +
+                        "</div>" +
+
+                        "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link into your browser:</p>" +
+                        "<p style='font-size: 14px; word-break: break-all; color: #cc0000;'>" + resubmitLink + "</p>" +
+                        "</div>" +
+
+                        "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
+                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #cc0000; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "</div>" +
+                        "</div>";
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true); // Enable HTML
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send music rejection email", e);
+        }
     }
+//    public void sendMusicRejectionEmail(String email, String notes) {
+//        String subject = "Music File Rejection Notification";
+//        String body = "Dear Artist,\n\n" +
+//                     "Your music file has been rejected by the administrator.\n\n" +
+//                     "Reason: " + notes + "\n\n" +
+//                     "Please review and resubmit your music file with the necessary corrections.\n\n" +
+//                     "Best regards,\nMusic Royalties System";
+//        sendEmail(email, subject, body);
+//    }
     
 //    public void sendProfileApprovalEmail(String email) {
 //        String subject = "Profile Approval Notification";
@@ -154,16 +203,63 @@ public class EmailService {
             throw new RuntimeException("Failed to send profile approval email", e);
         }
     }
-
-
+    //music approval
+    /**
+     * Sends a styled HTML email notification for music file approval.
+     */
     public void sendMusicApprovalEmail(String email) {
         String subject = "Music File Approval Notification";
-        String body = "Dear Artist,\n\n" +
-                     "Congratulations! Your music file has been approved by the administrator.\n\n" +
-                     "Your music is now available for companies to select.\n\n" +
-                     "Best regards,\nMusic Royalties System";
-        sendEmail(email, subject, body);
+        String logoUrl = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+        String dashboardLink = "http://localhost:8080/artist/dashboard"; // Link to artist dashboard
+
+        String htmlBody =
+                "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f7fff7;'>" +
+                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #4caf50;'>" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "</div>" +
+
+                        "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
+                        "<h2 style='color: #2e7d32; margin-top: 0;'>Dear Artist,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>🎉 Congratulations! Your music file has been <strong>approved</strong> by the administrator.</p>" +
+                        "<p style='font-size: 16px;'>Your track is now live in the system and available for companies to license and use.</p>" +
+
+                        "<div style='text-align: center; margin: 30px 0;'>" +
+                        "<a href='" + dashboardLink + "' " +
+                        "style='background-color: #2e7d32; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                        "View Dashboard" +
+                        "</a>" +
+                        "</div>" +
+
+                        "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link:</p>" +
+                        "<p style='font-size: 14px; word-break: break-all; color: #2e7d32;'>" + dashboardLink + "</p>" +
+                        "</div>" +
+
+                        "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
+                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #2e7d32; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "</div>" +
+                        "</div>";
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true); // Enable HTML
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send music approval email", e);
+        }
     }
+
+//    public void sendMusicApprovalEmail(String email) {
+//        String subject = "Music File Approval Notification";
+//        String body = "Dear Artist,\n\n" +
+//                     "Congratulations! Your music file has been approved by the administrator.\n\n" +
+//                     "Your music is now available for companies to select.\n\n" +
+//                     "Best regards,\nMusic Royalties System";
+//        sendEmail(email, subject, body);
+//    }
 
     public void sendVerificationEmail(String email, String token) {
         String subject = "Email Verification";
@@ -507,5 +603,47 @@ public class EmailService {
     }
 
 
-    //
+    //Section to send and Implement forgot Password
+    public void sendPasswordResetEmail(String email, String token) {
+        String subject = "Password Reset Request";
+        String logoUrl = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+        String resetLink = "http://localhost:3000/auth/reset-password?token=" + token; // Frontend URL
+        // If you don't have a frontend yet, you can point to a temporary endpoint later
+
+        String htmlBody = """
+        <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>
+            <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #9b6de8;'>
+                <img src='%s' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />
+            </div>
+            <div style='padding: 30px; color: #444; line-height: 1.6;'>
+                <h2 style='color: #6a0dad; margin-top: 0;'>Password Reset</h2>
+                <p style='font-size: 16px; color: #333;'>You requested a password reset. Click the button below to set a new password.</p>
+                <div style='text-align: center; margin: 30px 0;'>
+                    <a href='%s' 
+                       style='background-color: #8a2be2; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>
+                       Reset Password
+                    </a>
+                </div>
+                <p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the link below:</p>
+                <p style='font-size: 14px; word-break: break-all; color: #8a2be2;'>%s</p>
+                <p style='font-size: 14px; color: #999; margin-top: 20px;'>This link expires in 1 hour.</p>
+            </div>
+            <div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>
+                <p>&copy; 2025 Music Royalties System. All rights reserved.</p>
+                <p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #8a2be2; text-decoration: none;'>support@ytnafrica.com</a></p>
+            </div>
+        </div>
+        """.formatted(logoUrl, resetLink, resetLink);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send password reset email", e);
+        }
+    }
 }

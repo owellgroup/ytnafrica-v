@@ -100,4 +100,29 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Verification failed: " + e.getMessage());
         }
     }
+
+    //endpoint for forgot password
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            userService.initiatePasswordReset(email);
+            return ResponseEntity.ok("Password reset link has been sent to your email.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    //endpoint for reset password
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        try {
+            String token = request.get("token");
+            String newPassword = request.get("newPassword");
+            userService.resetPassword(token, newPassword);
+            return ResponseEntity.ok("Password has been reset successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 }
