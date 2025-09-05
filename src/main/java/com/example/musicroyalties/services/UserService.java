@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
         
         return userRepository.save(user);
     }
-    
+    //creating Admin,
     public User createAdmin(String email, String password) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
@@ -92,7 +92,8 @@ public class UserService implements UserDetailsService {
         
         return false;
     }
-    
+
+    //get users
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));

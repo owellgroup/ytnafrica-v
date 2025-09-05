@@ -163,16 +163,16 @@ public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") 
         try {
             User user = (User) userDetails;
 
-            // Fetch the photo for this user
+            // fetch proof of payment
             ProofOfPayment existingproof = proofOfPaymentService.getByUserId(user.getId())
-                    .orElseThrow(() -> new RuntimeException("You don't have a passport photo yet"));
+                    .orElseThrow(() -> new RuntimeException("You don't have a proof of payment"));
 
-            // Update the photo
+            // Update Proof of pay
             ProofOfPayment updatedpayment = proofOfPaymentService.updateDocument(existingproof.getId(), file, documentTitle);
             return ResponseEntity.ok(updatedpayment);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Passport photo update failed: " + e.getMessage());
+            return ResponseEntity.badRequest().body("proof of payment update failed: " + e.getMessage());
         }
     }
 
@@ -191,12 +191,34 @@ public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") 
 
     //update Bank Comfirm letter
     @PutMapping("/updatebankletteruser")
-    public ResponseEntity<?> updateBankLetterUser(@RequestParam("file") MultipartFile file,@RequestParam("documentTitle") String documentTitle, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
-        User user = (User) userDetails;
-        BankConfirmationLetter existingBankC = bankConfirm.getByUserId(user.getId()).orElseThrow(() -> new  RuntimeException("You don't have a passport photo yet"));
-        BankConfirmationLetter updated = bankConfirm.updateDocument(existingBankC.getId(), file, documentTitle);
-        return ResponseEntity.ok(updated);
+
+    public ResponseEntity<?> bankconfrimletter (@RequestParam("file") MultipartFile file,
+                                         @RequestParam("documentTitle") String documentTitle,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = (User) userDetails;
+
+            // Fetch the bank comfirm letter for this user
+            BankConfirmationLetter exsitingbank = bankConfirm.getByUserId(user.getId())
+                    .orElseThrow(() -> new RuntimeException("You don't have a proof of payment"));
+
+            // Update the bank Comfirm
+            BankConfirmationLetter updatedpayment = bankConfirm.updateDocument(exsitingbank.getId(), file, documentTitle);
+            return ResponseEntity.ok(updatedpayment);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Proof of payment update failed: " + e.getMessage());
+        }
     }
+
+
+    //    @PutMapping("/updatebankletteruser")
+//    public ResponseEntity<?> updateBankLetterUser(@RequestParam("file") MultipartFile file,@RequestParam("documentTitle") String documentTitle, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
+//        User user = (User) userDetails;
+//        BankConfirmationLetter existingBankC = bankConfirm.getByUserId(user.getId()).orElseThrow(() -> new  RuntimeException("You don't have a passport photo yet"));
+//        BankConfirmationLetter updated = bankConfirm.updateDocument(existingBankC.getId(), file, documentTitle);
+//        return ResponseEntity.ok(updated);
+//    }
     //Delete bank Comfirm letter
     @DeleteMapping("/deletebankletteruser")
     public  ResponseEntity<?> deleteBankLetterUser(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
@@ -208,15 +230,39 @@ public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") 
     }
 
     //Update Id, not sure abiiut id
-    @PutMapping("/updateuserid")
-    public ResponseEntity<?> updateUserId (@RequestParam("file") MultipartFile file,@RequestParam("documentTitle") String documentTitle, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
-        User user = (User) userDetails;
-        IdDocument existing = idDocumentService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a passport photo yet"));
-        IdDocument updated = idDocumentService.updateDocument(existing.getId(), file, documentTitle);
-        return ResponseEntity.ok(updated);
+//    @PutMapping("/updatiddocbyuser")
+//    public ResponseEntity<?> updateUserId (@RequestParam("file") MultipartFile file,@RequestParam("documentTitle") String documentTitle, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
+//        User user = (User) userDetails;
+//        IdDocument existing = idDocumentService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a passport photo yet"));
+//        IdDocument updated = idDocumentService.updateDocument(existing.getId(), file, documentTitle);
+//        return ResponseEntity.ok(updated);
+//    }
+
+    //new Update for ID
+    @PutMapping("/updatiddocbyuser")
+
+    public ResponseEntity<?> udateIdDoc (@RequestParam("file") MultipartFile file,
+                                                @RequestParam("documentTitle") String documentTitle,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = (User) userDetails;
+
+            // Fetch the bank comfirm letter for this user
+            IdDocument exsitingbank = idDocumentService.getByUserId(user.getId())
+                    .orElseThrow(() -> new RuntimeException("You don't have a ID"));
+
+            // Update the bank Comfirm
+            IdDocument updatedpayment = idDocumentService.updateDocument(exsitingbank.getId(), file, documentTitle);
+            return ResponseEntity.ok(updatedpayment);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("ID update failed: " + e.getMessage());
+        }
     }
+
+
     //delete
-    @DeleteMapping("/deleteuserid")
+    @DeleteMapping("/deleteuseriddoc")
     public  ResponseEntity<?> deleteUserId (@AuthenticationPrincipal UserDetails userDetails) throws Exception {
         User user = (User) userDetails;
         IdDocument exist= idDocumentService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a passport photo yet"));

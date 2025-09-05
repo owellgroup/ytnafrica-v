@@ -82,6 +82,8 @@ public class BankConfirmationLetterService {
             throw new RuntimeException("Failed to load file: " + fileName + ". Error: " + e.getMessage());
         }
     }
+
+    //helper method for
     
     public List<BankConfirmationLetter> getAll() {
         return bankConfirmationLetterRepository.findAll();

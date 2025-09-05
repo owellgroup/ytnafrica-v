@@ -37,6 +37,8 @@ public class ArtistController {
     
     @Autowired
     private MusicService musicService;
+    @Autowired
+    private UserService userService;
     
     @PostMapping("/profile")
     public ResponseEntity<?> createProfile(@RequestBody MemberDetails memberDetails, 
@@ -223,7 +225,16 @@ public class ArtistController {
         memberDetailsService.deleteMemberDetailsById(id);
     }
 
-    //Update for the Documents (ID)
+  //get Users by emails
+    @GetMapping("/getartist")
+    public ResponseEntity<?> getArtist(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = (User) userDetails;
+            return ResponseEntity.ok(userService.getUserByEmail(user.getEmail()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
