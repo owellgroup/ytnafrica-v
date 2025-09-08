@@ -167,6 +167,11 @@ public class MusicService {
         return artistWorkRepository.findByStatusId(approvedStatus.getId());
     }
 
+    //get All music
+    public List<ArtistWork> getAllmusic() {
+        return  artistWorkRepository.findAll();
+    }
+
     //Admin
     public Optional<ArtistWork> getMusicById(Long id) {
         return artistWorkRepository.findById(id);
