@@ -30,6 +30,7 @@ public class ArtistWork {
     private String producer;
 
     //CustomIds for works
+    @Column(unique = true)
     private String workId;
 
     private String Duration;
@@ -50,19 +51,19 @@ public class ArtistWork {
     @ManyToOne
     @JoinColumn(name = "artist_work_type_id")
     private ArtistWorkType artistWorkType;//Pop//jazz etc
-    
 
 
-    
-    @ManyToOne
+
+
+    @ManyToOne()
     @JoinColumn(name = "status_id")
     private Status status;
     
     private String ISRC_code;
     private String notes;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     //Extra Details
@@ -78,7 +79,7 @@ public class ArtistWork {
     private String RecordingCompanyTelephone;
     private String labelName;
     private String dateRecorded;
-
+    //private String ipiNumber;
 
 
 }

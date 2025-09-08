@@ -3,6 +3,7 @@ package com.example.musicroyalties.controllers.update;
 import com.example.musicroyalties.models.*;
 import com.example.musicroyalties.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -85,7 +86,7 @@ public class ArtistOtherController {
     }
 
     @PutMapping("/updatemusic/{id}")
-    public ArtistWork updamusic(Long id, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
+    public ArtistWork updamusic(Long id,@AuthenticationPrincipal UserDetails userDetails, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
                                 @RequestParam String albumName,
                                 @RequestParam String artist,
 
@@ -93,7 +94,7 @@ public class ArtistOtherController {
                                 @RequestParam String featuredArtist,
                                 @RequestParam String producer,
                                 @RequestParam String country,
-                                @RequestParam LocalDate uploadedDate,
+
                                 @RequestParam Long artistUploadTypeId,
                                 @RequestParam Long artistWorkTypeId,
                                 @RequestParam String Duration,
@@ -108,7 +109,8 @@ public class ArtistOtherController {
                                 @RequestParam String AddressOfRecordingCompany,
                                 @RequestParam String labelName,
                                 @RequestParam String dateRecorded) throws Exception {
-        return musicService.updateMusic(id,file, title, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
+        User user = (User) userDetails;
+        return musicService.updateMusic(id,file, title, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
     }
 // End of the Part for the Admin Us
 // This Part is for Aunthenticated users to
@@ -299,48 +301,128 @@ public ResponseEntity<?> updatePassportPhoto(@PathVariable@RequestParam("file") 
         return ResponseEntity.ok(proofOfPaymentService.getByUserId(user.getId()));
     }
 
-    //Music side
-    @PutMapping("/updatemusicbyuser")
-    public ResponseEntity<?> updatems (@AuthenticationPrincipal UserDetails userDetails, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
-                                       @RequestParam String albumName,
-                                       @RequestParam String artist,
-                                       @RequestParam String GroupOrBandOrStageName,
-                                       @RequestParam String featuredArtist,
-                                       @RequestParam String producer,
-                                       @RequestParam String country,
-                                       @RequestParam LocalDate uploadedDate,
-                                       @RequestParam Long artistUploadTypeId,
-                                       @RequestParam Long artistWorkTypeId,
-                                       @RequestParam String Duration,
-                                       @RequestParam String composer,
-                                       @RequestParam String author,
-                                       @RequestParam String arranger,
-                                       @RequestParam String publisher,
-                                       @RequestParam String publishersName,
-                                       @RequestParam String publisherAdress,
-                                       @RequestParam String publisherTelephone,
-                                       @RequestParam String recordedBy,
-                                       @RequestParam String AddressOfRecordingCompany,
-                                       @RequestParam String labelName,
-                                       @RequestParam String dateRecorded) {
+//    //Music side
+//    @PutMapping("/updatemusicbyuser/{id}")
+//    public ResponseEntity<?> updatems (@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, @RequestParam MultipartFile file, @RequestParam String title, @RequestParam String ArtistId,
+//                                       @RequestParam String albumName,
+//                                       @RequestParam String artist,
+//                                       @RequestParam String GroupOrBandOrStageName,
+//                                       @RequestParam String featuredArtist,
+//                                       @RequestParam String producer,
+//                                       @RequestParam String country,
+//                                       //@RequestParam LocalDate uploadedDate,
+//                                       @RequestParam Long artistUploadTypeId,
+//                                       @RequestParam Long artistWorkTypeId,
+//                                       @RequestParam String Duration,
+//                                       @RequestParam String composer,
+//                                       @RequestParam String author,
+//                                       @RequestParam String arranger,
+//                                       @RequestParam String publisher,
+//                                       @RequestParam String publishersName,
+//                                       @RequestParam String publisherAdress,
+//                                       @RequestParam String publisherTelephone,
+//                                       @RequestParam String recordedBy,
+//                                       @RequestParam String AddressOfRecordingCompany,
+//                                       @RequestParam String labelName,
+//                                       @RequestParam String dateRecorded) {
+//
+//        try {
+//            User user = (User) userDetails;
+//            ArtistWork exist = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a music   yet"));
+//            ArtistWork musicId = musicService.getMusicById(exist.getId()).orElseThrow(() -> new RuntimeException("You don't have a music"));
+//            ArtistWork update = musicService.updateMusic(exist.getId(), musicId.getId(), file, title, ArtistId, albumName, GroupOrBandOrStageName, artist, featuredArtist, producer, country, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress, publisherTelephone, recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
+//            return ResponseEntity.ok(update);
+//        }catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Music Update failed: " + e.getMessage());
+//        }
+//    }
+    //New update
+@PutMapping("/updatemusicbyuser/{id}")
+public ResponseEntity<?> updateMusicByUser(
+        @PathVariable Long id,
+        @AuthenticationPrincipal UserDetails userDetails,
+        @RequestParam MultipartFile file,
+        @RequestParam String title,
+        @RequestParam String ArtistId,
+        @RequestParam String albumName,
+        @RequestParam String artist,
+        @RequestParam String GroupOrBandOrStageName,
+        @RequestParam String featuredArtist,
+        @RequestParam String producer,
+        @RequestParam String country,
+        @RequestParam Long artistUploadTypeId,
+        @RequestParam Long artistWorkTypeId,
+        @RequestParam String Duration,
+        @RequestParam String composer,
+        @RequestParam String author,
+        @RequestParam String arranger,
+        @RequestParam String publisher,
+        @RequestParam String publishersName,
+        @RequestParam String publisherAdress,
+        @RequestParam String publisherTelephone,
+        @RequestParam String recordedBy,
+        @RequestParam String AddressOfRecordingCompany,
+        @RequestParam String labelName,
+        @RequestParam String dateRecorded) {
 
-        try {
-            User user = (User) userDetails;
-            ArtistWork exist = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have a music   yet"));
-            ArtistWork update = musicService.updateMusic(exist.getId(), file, title, ArtistId, albumName, GroupOrBandOrStageName, artist, featuredArtist, producer, country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress, publisherTelephone, recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
-            return ResponseEntity.ok(update);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().body("Music Update failed: " + e.getMessage());
+    try {
+        // get logged in user
+        User currentUser = (User) userDetails;
+
+        // find the music by id
+        ArtistWork music = musicService.getMusicById(id)
+                .orElseThrow(() -> new RuntimeException("Music not found with id: " + id));
+
+        // check ownership
+        if (!music.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only update your own music");
         }
+
+        // perform update
+        ArtistWork updated = musicService.updateMusic(
+                id,
+                file,
+                title,
+                ArtistId,
+                albumName,
+                GroupOrBandOrStageName,
+                artist,
+                featuredArtist,
+                producer,
+                country,
+                artistUploadTypeId,
+                artistWorkTypeId,
+                Duration,
+                composer,
+                author,
+                arranger,
+                publisher,
+                publishersName,
+                publisherAdress,
+                publisherTelephone,
+                recordedBy,
+                AddressOfRecordingCompany,
+                labelName,
+                dateRecorded
+        );
+
+        return ResponseEntity.ok(updated);
+
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body("Music Update failed: " + e.getMessage());
     }
+}
+
 
     //delete
-    @DeleteMapping("/deletemusicbyuserid")
-    public ResponseEntity<?> deletemusic (@AuthenticationPrincipal UserDetails userDetails) throws Exception {
+    @DeleteMapping("/deletemusicbyuserid/{id}")
+    public ResponseEntity<?> deletemusic (@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long id) throws Exception {
         User user = (User) userDetails;
-        ArtistWork art = musicService.getByUserId(user.getId()).orElseThrow(() -> new RuntimeException("You don't have music  yet"));
-        musicService.deleteMusic(art.getId());
-        return ResponseEntity.ok().build();
+        ArtistWork music = musicService.getMusicById(id)
+                .orElseThrow(() -> new RuntimeException("Music not found with id: " + id));
+      musicService.deleteMusic(id);
+      return ResponseEntity.ok(music);
+
     }
 
 }

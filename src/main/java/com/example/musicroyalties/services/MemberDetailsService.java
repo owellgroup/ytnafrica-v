@@ -102,6 +102,10 @@ public class MemberDetailsService {
     public Optional<MemberDetails> getMemberDetailsById(Long id) {
         return memberDetailsRepository.findById(id);
     }
+    //find Members details by user ID
+    public Optional<MemberDetails> getByUserId(Long userId) {
+        return memberDetailsRepository.findByUserId(userId);
+    }
     
     public List<MemberDetails> getAllMemberDetails() {
         return memberDetailsRepository.findAll();

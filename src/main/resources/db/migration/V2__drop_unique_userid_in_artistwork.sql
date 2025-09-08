@@ -1,0 +1,1 @@
+--ALTER TABLE artist_work DROP CONSTRAINT uk_7b2sxq0flxbbrqnhoww4nhun4;

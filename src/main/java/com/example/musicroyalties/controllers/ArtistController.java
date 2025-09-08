@@ -153,7 +153,7 @@ public class ArtistController {
                                          @RequestParam String featuredArtist,
                                          @RequestParam String producer,
                                          @RequestParam String country,
-                                         @RequestParam LocalDate uploadedDate,
+                                         //@RequestParam LocalDate uploadedDate,
                                          @RequestParam Long artistUploadTypeId,
                                          @RequestParam Long artistWorkTypeId,
                                          @RequestParam String Duration,
@@ -170,7 +170,7 @@ public class ArtistController {
                                          @RequestParam String dateRecorded) {
         try {
             User user = (User) userDetails;
-            ArtistWork music = musicService.uploadMusic(file, title, user, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, uploadedDate, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
+            ArtistWork music = musicService.uploadMusic(file, title, user, ArtistId, albumName, artist, GroupOrBandOrStageName, featuredArtist, producer,country, artistUploadTypeId, artistWorkTypeId, Duration, composer, author, arranger, publisher, publishersName, publisherAdress,publisherTelephone,recordedBy, AddressOfRecordingCompany, labelName, dateRecorded );
             return ResponseEntity.ok(music);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Music upload failed: " + e.getMessage());
@@ -188,7 +188,7 @@ public class ArtistController {
     }
     //most used by admin
     //if this does not work than I might remove aunthentication or not to get users documents, where admin or user
-    @GetMapping("/documents")
+    @GetMapping("/documentsandprofile")
     public ResponseEntity<?> getMyDocuments(@AuthenticationPrincipal UserDetails userDetails) {
         try {
             User user = (User) userDetails;
@@ -199,6 +199,8 @@ public class ArtistController {
             documents.put("proofOfPayment", proofOfPaymentService.getByUserId(user.getId()));
             documents.put("bankConfirmationLetter", bankConfirmationLetterService.getByUserId(user.getId()));
             documents.put("idDocument", idDocumentService.getByUserId(user.getId()));
+            //recently added to get profile for user
+            documents.put("memberDetails",memberDetailsService.getByUserId(user.getId()));
             
             return ResponseEntity.ok(documents);
         } catch (Exception e) {

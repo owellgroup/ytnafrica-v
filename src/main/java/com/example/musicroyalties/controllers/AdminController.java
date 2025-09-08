@@ -8,7 +8,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,6 +26,23 @@ public class AdminController {
     
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private PassportPhotoService  passportPhotoService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private IdDocumentService idDocumentService;
+
+    @Autowired
+    private BankConfirmationLetterService bankConfirmationLetterService;
+
+    @Autowired
+    private ProofOfPaymentService proofOfPaymentService;
+    @Autowired
+    private MusicService musicService;
     
     @GetMapping("/pending-profiles")
     public ResponseEntity<?> getPendingProfiles() {
@@ -166,5 +185,53 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to get companies: " + e.getMessage());
         }
+    }
+    //Get Profiles
+    @GetMapping("/getprofilebyid/{id}")
+    public Optional<MemberDetails> getProfileById(@PathVariable Long id) {
+        return memberDetailsService.getMemberDetailsById(id);
+    }
+
+    @GetMapping("/getallprofiles")
+    public List<MemberDetails> getAllProfiles() {
+        return memberDetailsService.getAllMemberDetails();
+    }
+
+
+
+    //get Users Documents By users
+    @GetMapping("/userdocumentsandprofiles/{userId}")
+    public ResponseEntity<?> getUserDocuments(@PathVariable Long userId) {
+        try {
+            Map<String, Object> documents = new HashMap<>();
+            documents.put("passportphoto", passportPhotoService.getByUserId(userId).orElse(null));
+            documents.put("proofOfPayment", proofOfPaymentService.getByUserId(userId).orElse(null));
+            documents.put("idDocument", idDocumentService.getByUserId(userId).orElse(null));
+            documents.put("bankConfirmationLetter", bankConfirmationLetterService.getByUserId(userId).orElse(null));
+            documents.put("memberDetails",memberDetailsService.getByUserId(userId).orElse(null));
+            return ResponseEntity.ok(documents);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error fetching documents for userId " + userId + ": " + e.getMessage());
+        }
+    }
+
+    //get Users Musics by users
+    @GetMapping("/usermusic/{userId}")
+    public ResponseEntity<?> getMusicByUserId(@PathVariable Long userId) {
+        try {
+            // Service method should return a list
+            List<ArtistWork> musicList = musicService.getMusicByUserId(userId);
+
+            return ResponseEntity.ok(musicList);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error fetching music for userId " + userId + ": " + e.getMessage());
+        }
+    }
+
+    //get all music in the system
+    @GetMapping("/getllmusic")
+    public List<ArtistWork> getllmusic() {
+        return musicService.ListOfMusic();
     }
 }

@@ -39,14 +39,14 @@ public class MusicService {
     
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/music/";
     //not sure about the memberId and status
-    public ArtistWork uploadMusic(MultipartFile file, String title, User user, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, LocalDate uploadedDate, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws Exception {
+    public ArtistWork uploadMusic(MultipartFile file, String title, User user, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws Exception {
         String contentType = file.getContentType();
 
         //calling Ids
         ArtistUploadType artistUploadType = artistUploadTypeService.getArtistUploadTypeById(artistUploadTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
         ArtistWorkType art = artistWorkTypeService.findWorkType(artistWorkTypeId).orElseThrow(() -> new RuntimeException("uploadtype not found "));
         //custom ID Generation
-        String contentId = generateContentId(title, ArtistId, uploadedDate.getYear());
+        String contentId = generateContentId(title, ArtistId);
 
         
         // Allow only audio and video files
@@ -77,7 +77,7 @@ public class MusicService {
         ArtistWork music = new ArtistWork();
         music.setRecordingCompanyTelephone(publisherTelephone);
         music.setLabelName(labelName);
-        music.setUploadedDate(uploadedDate);
+        //music.setUploadedDate(uploadedDate);
         music.setDateRecorded(dateRecorded);
         music.setWorkId(contentId);
         music.setArranger(arranger);
@@ -102,8 +102,10 @@ public class MusicService {
         music.setFileType(contentType);
         music.setArtistUploadType(artistUploadType);
         music.setArtistWorkType(art);
-        //music.setUploadedDate(LocalDate.now());
+        music.setUploadedDate(LocalDate.now());
         music.setUser(user);
+        //not sure if it works
+        //music.setIpiNumber(music.getIpiNumber());
 
         music.setStatus(pendingStatus);
         
@@ -154,7 +156,7 @@ public class MusicService {
                         "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
-    
+    //for specific users to get thier details only
     public List<ArtistWork> getMusicByUser(User user) {
         return artistWorkRepository.findByUser(user);
     }
@@ -164,16 +166,17 @@ public class MusicService {
                 .orElseThrow(() -> new RuntimeException("Approved status not found"));
         return artistWorkRepository.findByStatusId(approvedStatus.getId());
     }
-    
+
+    //Admin
     public Optional<ArtistWork> getMusicById(Long id) {
         return artistWorkRepository.findById(id);
     }
-
+    //Get music by User Id
     public Optional<ArtistWork> getByUserId (Long userId) {
         return artistWorkRepository.findById(userId);
     }
     
-    public ArtistWork updateMusic(Long id, MultipartFile file, String title, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, LocalDate uploadedDate, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws IOException {
+    public ArtistWork updateMusic(Long id, MultipartFile file, String title, String ArtistId, String albumName, String artist, String GroupOrBandOrStageName, String featuredArtist, String producer, String country, Long artistUploadTypeId, Long artistWorkTypeId, String Duration, String composer, String author, String arranger, String publisher, String publishersName, String publisherAdress, String publisherTelephone, String recordedBy, String AddressOfRecordingCompany, String labelName, String dateRecorded ) throws IOException {
         ArtistWork music = artistWorkRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Music not found"));
 
@@ -201,7 +204,7 @@ public class MusicService {
 
         music.setRecordingCompanyTelephone(publisherTelephone);
         music.setLabelName(labelName);
-        music.setUploadedDate(uploadedDate);
+        //music.setUploadedDate(uploadedDate);
         music.setDateRecorded(dateRecorded);
         music.setArranger(arranger);
         music.setPublishersName(publishersName);
@@ -223,7 +226,7 @@ public class MusicService {
         music.setTitle(title);
         music.setArtistUploadType(artistUploadType);
         music.setArtistWorkType(art);
-        //music.setUploadedDate(LocalDate.now());
+        music.setUploadedDate(LocalDate.now());
 
         return artistWorkRepository.save(music);
     }
@@ -235,11 +238,11 @@ public class MusicService {
     //Id Generation Methods
     //customes Ids generating
     //String contentId = generateContentId(title, ArtistId, uploadedDate.getYear());
-    private String generateContentId(String tittle, String ArtistId, int uploadedDate) {
+    private String generateContentId(String tittle, String ArtistId) {
         String prefix = "NAM";
         String lastNamePart = tittle.length() >= 2 ? tittle.substring(0, 2).toUpperCase() : tittle.toUpperCase();
         String lastNamePart2 = ArtistId.length() >= 2 ? ArtistId.substring(0, 2).toUpperCase() : ArtistId.toUpperCase();
-        String yearPart = String.valueOf(uploadedDate).substring(2);
+        //String yearPart = String.valueOf(uploadedDate).substring(2);
         //method
 
         // Get the current count of members from the database and add 1
@@ -249,7 +252,18 @@ public class MusicService {
         String counterPart = String.format("%01d", count);
 
 
-        return prefix + lastNamePart + yearPart + lastNamePart2 +  counterPart;
+        return prefix + lastNamePart  + lastNamePart2 +  counterPart;
     }
+
+    //get Music by ID
+    public List<ArtistWork> getMusicByUserId(Long userId) {
+        return artistWorkRepository.findByUserId(userId);
+    }
+
+    //get All music
+    public List<ArtistWork> ListOfMusic() {
+        return artistWorkRepository.findAll();
+    }
+
 
 }

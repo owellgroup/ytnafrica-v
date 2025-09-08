@@ -96,6 +96,10 @@ public class BankConfirmationLetterService {
     public Optional<BankConfirmationLetter> getByUserId(Long userId) {
         return bankConfirmationLetterRepository.findByUserId(userId);
     }
+
+    //find documents by user
+
+
     
     public void delete(Long id) {
         bankConfirmationLetterRepository.deleteById(id);

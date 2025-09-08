@@ -131,26 +131,209 @@ public class FileViewController {
 
 
 
+//    // Music File View
+//    @GetMapping("/api/music/view/{fileName:.+}")
+//    public ResponseEntity<Resource> viewMusicFile(@PathVariable String fileName) {
+//        try {
+//            Resource resource = musicService.loadFileAsResource(fileName);
+//            return ResponseEntity.ok()
+//                    .header("Content-Disposition", "inline; filename=\"" + resource.getFilename() + "\"")
+//                    .body(resource);
+//        } catch (Exception e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
     // Music File View
     @GetMapping("/api/music/view/{fileName:.+}")
-    public ResponseEntity<Resource> viewMusicFile(@PathVariable String fileName) {
+    public ResponseEntity<Resource> viewMusicFile(@PathVariable String fileName,
+                                                  HttpServletRequest request) {
         try {
             Resource resource = musicService.loadFileAsResource(fileName);
+
+            // Detect file content type
+            String contentType = request.getServletContext()
+                    .getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // fallback
+            }
+
             return ResponseEntity.ok()
-                    .header("Content-Disposition", "inline; filename=\"" + resource.getFilename() + "\"")
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "inline; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
+
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
+
     // Music Download
-    @GetMapping("/api/music/download/{id}")
-    public ResponseEntity<?> downloadMusic(@PathVariable Long id) {
+//    @GetMapping("/api/music/download/{id}")
+//    public ResponseEntity<?> downloadMusic(@PathVariable Long id) {
+//        try {
+//            return musicService.downloadMusic(id);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Download failed: " + e.getMessage());
+//        }
+//    }
+    // Music Download
+//    @GetMapping("/api/music/download/{fileName:.+}")
+//    public ResponseEntity<Resource> downloadMusic(@PathVariable String fileName,
+//                                                  HttpServletRequest request) {
+//        try {
+//            Resource resource = musicService.loadFileAsResource(fileName);
+//
+//            // Detect MIME type
+//            String contentType = request.getServletContext()
+//                    .getMimeType(resource.getFile().getAbsolutePath());
+//            if (contentType == null) {
+//                contentType = "application/octet-stream";
+//            }
+//
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.parseMediaType(contentType))
+//                    .header(HttpHeaders.CONTENT_DISPOSITION,
+//                            "attachment; filename=\"" + resource.getFilename() + "\"")
+//                    .body(resource);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+    //forcely Download
+    @GetMapping("/api/music/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadMusic(@PathVariable String fileName,
+                                                  HttpServletRequest request) {
         try {
-            return musicService.downloadMusic(id);
+            // Load file as resource
+            Resource resource = musicService.loadFileAsResource(fileName);
+
+            if (resource == null || !resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Detect MIME type
+            String contentType = request.getServletContext()
+                    .getMimeType(resource.getFile().getAbsolutePath());
+
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    // Force download with the original filename
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Download failed: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+
+
+
+
+
+
+
+    //downloading endpoints, Use this end points
+    // Passport Photo Download
+    @GetMapping("/api/passportphoto/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadPassportPhoto(@PathVariable String fileName,
+                                                          HttpServletRequest request) {
+        try {
+            Resource resource = passportPhotoService.loadFileAsResource(fileName);
+
+            // Detect MIME type
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Proof of Payment Download
+    @GetMapping("/api/proofofpayment/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadProofOfPayment(@PathVariable String fileName,
+                                                           HttpServletRequest request) {
+        try {
+            Resource resource = proofOfPaymentService.loadFileAsResource(fileName);
+
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Bank Confirmation Letter Download
+    @GetMapping("/api/bankconfirmationletter/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadBankConfirmationLetter(@PathVariable String fileName,
+                                                                   HttpServletRequest request) {
+        try {
+            Resource resource = bankConfirmationLetterService.loadFileAsResource(fileName);
+
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // ID Document Download
+    @GetMapping("/api/iddocument/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadIdDocument(@PathVariable String fileName,
+                                                       HttpServletRequest request) {
+        try {
+            Resource resource = idDocumentService.loadFileAsResource(fileName);
+
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }
