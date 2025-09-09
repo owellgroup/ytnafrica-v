@@ -6,6 +6,7 @@ import com.example.musicroyalties.services.invoicesServices.InvoiceService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/invoices")
 @CrossOrigin(origins = "*")
+@PreAuthorize("hasRole('ADMIN')")
 public class InvoiceController {
 
     @Autowired

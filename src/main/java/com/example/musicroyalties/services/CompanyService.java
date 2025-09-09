@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
@@ -52,6 +53,7 @@ public class CompanyService {
         logSheet.setCreatedDate(LocalDate.now());
         logSheet.setCompany(company);
         logSheet.setSelectedMusic(selectedMusic);
+        logSheet.setUser(companyUser);
         
         return logSheetRepository.save(logSheet);
     }
@@ -60,26 +62,63 @@ public class CompanyService {
         Company company = getCompanyByUser(companyUser);
         return logSheetRepository.findByCompany(company);
     }
-    
+    //Get All Logsheets
+    public List<LogSheet> getAllLogSheets() {
+        return logSheetRepository.findAll();
+    }
     public Optional<LogSheet> getLogSheetById(Long id) {
         return logSheetRepository.findById(id);
     }
     
+//    public LogSheet updateLogSheet(Long id, String title, List<Long> musicIds) {
+//        LogSheet logSheet = logSheetRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("LogSheet not found"));
+//
+//        List<ArtistWork> selectedMusic = musicIds.stream()
+//                .map(musicId -> musicService.getMusicById(musicId)
+//                        .orElseThrow(() -> new RuntimeException("Music not found with ID: " + musicId)))
+//                .toList();
+//
+//        logSheet.setTitle(title);
+//        logSheet.setSelectedMusic(selectedMusic);
+//
+//        return logSheetRepository.save(logSheet);
+//    }
+
+    //Full Fixed Code
     public LogSheet updateLogSheet(Long id, String title, List<Long> musicIds) {
         LogSheet logSheet = logSheetRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("LogSheet not found"));
-        
+                .orElseThrow(() -> new RuntimeException("LogSheet not found with id: " + id));
+
         List<ArtistWork> selectedMusic = musicIds.stream()
                 .map(musicId -> musicService.getMusicById(musicId)
                         .orElseThrow(() -> new RuntimeException("Music not found with ID: " + musicId)))
-                .toList();
-        
+                .collect(Collectors.toList()); // ✅ mutable list
+
         logSheet.setTitle(title);
         logSheet.setSelectedMusic(selectedMusic);
-        
+
         return logSheetRepository.save(logSheet);
     }
-    
+
+
+    //End of Full Fixed Code
+//public LogSheet updateLogSheet(Long id, String title, List<Long> musicIds) {
+//    LogSheet logSheet = logSheetRepository.findById(id)
+//            .orElseThrow(() -> new RuntimeException("LogSheet not found with id: " + id));
+//
+//    List<ArtistWork> selectedMusic = musicIds.stream()
+//            .map(musicId -> musicService.getMusicById(musicId)
+//                    .orElseThrow(() -> new RuntimeException("Music not found with ID: " + musicId)))
+//            .toList();
+//
+//    logSheet.setTitle(title);
+//    logSheet.setSelectedMusic(selectedMusic);
+//
+//    return logSheetRepository.save(logSheet);
+//}
+
+
     public void deleteLogSheet(Long id) {
         logSheetRepository.deleteById(id);
     }
@@ -108,4 +147,15 @@ public class CompanyService {
     public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
     }
+
+    public List<LogSheet> getLogSheetByUser(Long userId) {
+        return logSheetRepository.findByUserId(userId);
+    }
+
+    //
+    public List<LogSheet> getLogSheetsByUser(User user) {
+        Company company = getCompanyByUser(user);
+        return logSheetRepository.findByCompany(company);
+    }
+
 }

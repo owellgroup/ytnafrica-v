@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/company")
@@ -52,22 +53,47 @@ public class CompanyController {
         }
     }
     
+//    @PostMapping("/logsheet")
+//    public ResponseEntity<?> createLogSheet(@RequestBody Map<String, Object> request,
+//                                          @AuthenticationPrincipal UserDetails userDetails) {
+//        try {
+//            String title = (String) request.get("title");
+//
+//            List<Long> musicIds = (List<Long>) request.get("musicIds");
+//
+//            User user = (User) userDetails;
+//            LogSheet logSheet = companyService.createLogSheet(title, user, musicIds);
+//            return ResponseEntity.ok(logSheet);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("LogSheet creation failed: " + e.getMessage());
+//        }
+//    }
+
+    //create Logsheet
     @PostMapping("/logsheet")
     public ResponseEntity<?> createLogSheet(@RequestBody Map<String, Object> request,
-                                          @AuthenticationPrincipal UserDetails userDetails) {
+                                            @AuthenticationPrincipal UserDetails userDetails) {
         try {
             String title = (String) request.get("title");
+
+            // Safely convert the list
             @SuppressWarnings("unchecked")
-            List<Long> musicIds = (List<Long>) request.get("musicIds");
-            
+            List<Integer> musicIdsRaw = (List<Integer>) request.get("musicIds");
+
+            List<Long> musicIds = musicIdsRaw.stream()
+                    .map(Integer::longValue)
+                    .toList();
+
             User user = (User) userDetails;
+
             LogSheet logSheet = companyService.createLogSheet(title, user, musicIds);
             return ResponseEntity.ok(logSheet);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("LogSheet creation failed: " + e.getMessage());
         }
     }
-    
+
+
     @GetMapping("/logsheets")
     public ResponseEntity<?> getLogSheets(@AuthenticationPrincipal UserDetails userDetails) {
         try {
@@ -77,7 +103,7 @@ public class CompanyController {
             return ResponseEntity.badRequest().body("Failed to get logsheets: " + e.getMessage());
         }
     }
-    
+    //
     @GetMapping("/logsheet/{id}")
     public ResponseEntity<?> getLogSheetById(@PathVariable Long id) {
         try {
@@ -86,21 +112,118 @@ public class CompanyController {
             return ResponseEntity.badRequest().body("Failed to get logsheet: " + e.getMessage());
         }
     }
-    
+    //get All Logsheets for admins
+    @GetMapping("/getallsheets")
+    public List<LogSheet> getAllLogSheets() {
+        return companyService.getAllLogSheets();
+    }
+
+//    @PutMapping("/logsheet/{id}")
+//    public ResponseEntity<?> updateLogSheet(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+//        try {
+//            String title = (String) request.get("title");
+//            @SuppressWarnings("unchecked")
+//            List<Long> musicIds = (List<Long>) request.get("musicIds");
+//
+//            LogSheet updatedLogSheet = companyService.updateLogSheet(id, title, musicIds);
+//            return ResponseEntity.ok(updatedLogSheet);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("LogSheet update failed: " + e.getMessage());
+//        }
+//    }
+    //put mapping new
+//@PutMapping("/logsheet/{id}")
+//public ResponseEntity<?> updateLogSheet(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+//    try {
+//        String title = (String) request.get("title");
+//
+//        // Convert Integers to Longs
+//        @SuppressWarnings("unchecked")
+//        List<Integer> musicIdsRaw = (List<Integer>) request.get("musicIds");
+//
+//        List<Long> musicIds = musicIdsRaw.stream()
+//                .map(Integer::longValue)
+//                .toList();
+//
+//        LogSheet updatedLogSheet = companyService.updateLogSheet(id, title, musicIds);
+//        return ResponseEntity.ok(updatedLogSheet);
+//    } catch (Exception e) {
+//        return ResponseEntity.badRequest().body("LogSheet update failed: " + e.getMessage());
+//    }
+//}
+
+//    //newly updated
+//    @PutMapping("/logsheet/{id}")
+//    public ResponseEntity<?> updateLogSheet(@PathVariable Long id,
+//                                            @RequestBody Map<String, Object> request,
+//                                            @AuthenticationPrincipal UserDetails userDetails) {
+//        try {
+//            String title = (String) request.get("title");
+//
+//            // Convert safely
+//            @SuppressWarnings("unchecked")
+//            List<Integer> musicIdsRaw = (List<Integer>) request.get("musicIds");
+//
+//            List<Long> musicIds = musicIdsRaw.stream()
+//                    .map(Integer::longValue)
+//                    .toList();
+//
+//            // Get authenticated user
+//            User user = (User) userDetails;
+//
+//            // Fetch the logsheet and ensure it belongs to the same company
+//            LogSheet logSheet = companyService.getLogSheetById(id)
+//                    .orElseThrow(() -> new RuntimeException("LogSheet not found with id: " + id));
+//
+//            Company company = companyService.getCompanyByUser(user);
+//            if (!logSheet.getCompany().getId().equals(company.getId())) {
+//                return ResponseEntity.status(403).body("You are not allowed to update this logsheet");
+//            }
+//
+//            // Perform update
+//            LogSheet updatedLogSheet = companyService.updateLogSheet(id, title, musicIds);
+//            return ResponseEntity.ok(updatedLogSheet);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body("LogSheet update failed: " + e.getMessage());
+//        }
+//    }
+
     @PutMapping("/logsheet/{id}")
-    public ResponseEntity<?> updateLogSheet(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+    public ResponseEntity<?> updateLogSheet(@PathVariable Long id,
+                                            @RequestBody Map<String, Object> request,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
         try {
             String title = (String) request.get("title");
+
             @SuppressWarnings("unchecked")
-            List<Long> musicIds = (List<Long>) request.get("musicIds");
-            
+            List<Integer> musicIdsRaw = (List<Integer>) request.get("musicIds");
+
+            List<Long> musicIds = musicIdsRaw.stream()
+                    .map(Integer::longValue)
+                    .collect(Collectors.toList()); // ✅ mutable list
+
+            User user = (User) userDetails;
+
+            // 🔒 Ensure the logsheet belongs to the authenticated user’s company
+            LogSheet logSheet = companyService.getLogSheetById(id)
+                    .orElseThrow(() -> new RuntimeException("LogSheet not found with id: " + id));
+
+            Company company = companyService.getCompanyByUser(user);
+            if (!logSheet.getCompany().getId().equals(company.getId())) {
+                return ResponseEntity.status(403).body("You are not allowed to update this logsheet");
+            }
+
             LogSheet updatedLogSheet = companyService.updateLogSheet(id, title, musicIds);
             return ResponseEntity.ok(updatedLogSheet);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("LogSheet update failed: " + e.getMessage());
         }
     }
-    
+
+
+
     @DeleteMapping("/logsheet/{id}")
     public ResponseEntity<?> deleteLogSheet(@PathVariable Long id) {
         try {

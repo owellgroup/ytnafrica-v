@@ -82,7 +82,7 @@ public class AdminService {
     }
     
     public User createCompanyUser(String email, String password, String companyName, String companyAddress, 
-                                 String companyPhone, String contactPerson) {
+                                 String companyPhone, String contactPerson, String companyEmail) {
         // Create user with encoded password
         User user = new User();
         user.setEmail(email);
@@ -93,7 +93,12 @@ public class AdminService {
         
         return userRepository.save(user);
     }
-    
+
+    //Update Company
+
+
+
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

@@ -33,4 +33,9 @@ public class LogSheet {
         inverseJoinColumns = @JoinColumn(name = "music_id")
     )
     private List<ArtistWork> selectedMusic;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }

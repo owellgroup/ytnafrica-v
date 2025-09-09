@@ -5,24 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "companies")
-public class Company {
-    
+@Table(name = "admins")
+public class Admins {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    private String companyName;
-    private String companyAddress;
-    private String companyPhone;
-    private String companyEmail;
-    private String contactPerson;
-//    private String TaxNumber;
-    
+    private String name;
+    private String role;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
