@@ -65,6 +65,7 @@ public class MusicService {
         Files.copy(file.getInputStream(), filePath);
         
         String fileUrl = "http://localhost:8080/api/music/view/" + fileName;
+        //String fileUrl = "http://localhost:8080/api/music/view/" + fileName;
         
         // Set default status to PENDING
         Status pendingStatus = statusRepository.findByStatus(Status.EStatus.PENDING)
