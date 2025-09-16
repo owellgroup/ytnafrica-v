@@ -83,7 +83,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(
                 "https://namsa.vercel.app", // deployed frontend
-                "http://localhost:5173"     // local Vite dev
+                "http://localhost:8080"     // local Vite dev
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
