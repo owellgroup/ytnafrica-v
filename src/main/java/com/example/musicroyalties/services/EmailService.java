@@ -613,7 +613,7 @@ public class EmailService {
         String htmlBody = """
         <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>
             <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>
-                <img src='%s' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />
+                <img src='%s' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />
             </div>
             <div style='padding: 30px; color: #444; line-height: 1.6;'>
                 <h2 style='color: #ed7c08; margin-top: 0;'>Password Reset</h2>
