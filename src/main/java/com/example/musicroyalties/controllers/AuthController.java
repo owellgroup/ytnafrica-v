@@ -108,32 +108,32 @@ public class AuthController {
             boolean verified = userService.verifyEmail(token);
             if (verified) {
                 String loginUrl = "http://localhost:8080/api/auth/login"; // replace this
-                String logoUrl = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+                String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
 
                 String htmlResponse =
                         "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>" +
-                                "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #9b6de8;'>" +
-                                "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                                "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
+                                "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                                 "</div>" +
 
                                 "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                                "<h2 style='color: #6a0dad; margin-top: 0;'>Email Verified Successfully</h2>" +
+                                "<h2 style='color: #ed7c08; margin-top: 0;'>Email Verified Successfully</h2>" +
                                 "<p style='font-size: 16px; color: #333;'>Your email has been verified successfully. You can now login to your account.</p>" +
 
                                 "<div style='text-align: center; margin: 30px 0;'>" +
                                 "<a href='" + loginUrl + "' " +
-                                "style='background-color: #8a2be2; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                                "style='background-color: #ed7c08; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
                                 "Click to Login" +
                                 "</a>" +
                                 "</div>" +
 
                                 "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link into your browser:</p>" +
-                                "<p style='font-size: 14px; word-break: break-all; color: #8a2be2;'>" + loginUrl + "</p>" +
+                                "<p style='font-size: 14px; word-break: break-all; color: #ed7c08;'>" + loginUrl + "</p>" +
                                 "</div>" +
 
                                 "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                                "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
-                                "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #8a2be2; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                                "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                                "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #8a2be2; text-decoration: none;'>support@namsa.com</a></p>" +
                                 "</div>" +
                                 "</div>";
 

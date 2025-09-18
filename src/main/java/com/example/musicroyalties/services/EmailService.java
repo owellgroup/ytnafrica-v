@@ -49,7 +49,7 @@ public class EmailService {
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #fff8f8;'>" +
                         "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #e86d6d;'>" +
-                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
@@ -100,7 +100,7 @@ public class EmailService {
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #fff8f8;'>" +
                         "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #e86d6d;'>" +
-                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
@@ -167,7 +167,7 @@ public class EmailService {
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>" +
                         "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
-                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
@@ -215,7 +215,7 @@ public class EmailService {
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f7fff7;'>" +
                         "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
-                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
@@ -269,11 +269,11 @@ public class EmailService {
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>" +
                         "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
-                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
+                        "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 100px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #6a0dad; margin-top: 0;'>Hello, Namsa Member!</h2>" +
+                        "<h2 style='color: #ed7c08; margin-top: 0;'>Hello, Namsa Member!</h2>" +
                         "<p style='font-size: 16px; color: #333;'>Thank you for registering with <strong>namsa</strong>.</p>" +
                         "<p style='font-size: 16px;'>To complete your registration, please verify your email address by clicking the button below:</p>" +
 
@@ -364,7 +364,7 @@ public class EmailService {
         <body style='background-color: #f9f9f9; margin: 0; padding: 0;'>
             <div class="container" style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
                 <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #8a2be2;'>
-                    <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain; max-width: 100%%;' />
+                    <img src='%s' alt='YTN Africa Logo' style='height: 100px; object-fit: contain; max-width: 100%%;' />
                     <h1 style='color: #333; margin: 10px 0; font-size: 24px;'>INVOICE</h1>
                 </div>
 
@@ -510,7 +510,7 @@ public class EmailService {
     <body style='background-color: #f9f9f9; margin: 0; padding: 0;'>
         <div class="container" style='font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);'>
             <div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #8a2be2;'>
-                <img src='%s' alt='YTN Africa Logo' style='height: 70px; object-fit: contain; max-width: 100%%;' />
+                <img src='%s' alt='YTN Africa Logo' style='height: 100px; object-fit: contain; max-width: 100%%;' />
                 <h1 style='color: #333; margin: 10px 0; font-size: 24px;'>Proof of Payment</h1>
             </div>
 
