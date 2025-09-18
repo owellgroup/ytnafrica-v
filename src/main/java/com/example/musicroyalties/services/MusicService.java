@@ -64,7 +64,7 @@ public class MusicService {
         Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
         Files.copy(file.getInputStream(), filePath);
         
-        String fileUrl = "http://localhost:8080/api/music/view/" + fileName;
+        String fileUrl = "https://api.owellgraphics.com/api/music/view/" + fileName;
         //String fileUrl = "http://localhost:8080/api/music/view/" + fileName;
         
         // Set default status to PENDING
@@ -205,7 +205,7 @@ public class MusicService {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
             Files.copy(file.getInputStream(), filePath);
             
-            String fileUrl = "http://localhost:8080/api/music/view/" + fileName;
+            String fileUrl = "https://api.owellgraphics.com/api/music/view/" + fileName;
             music.setFileType(contentType);
             music.setFileUrl(fileUrl);
         }

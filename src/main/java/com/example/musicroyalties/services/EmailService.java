@@ -20,7 +20,7 @@ public class EmailService {
     @Autowired
     private PdfInvoiceGenerator pdfInvoiceGenerator;
 
-    private static final String LOGO_URL = "http://localhost:8080/src/assets/namsa-logo.png";
+    private static final String LOGO_URL = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
     
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -43,7 +43,7 @@ public class EmailService {
     //profile Rejection
     public void sendProfileRejectionEmail(String email, String notes) {
         String subject = "Profile Rejection Notification";
-        String logoUrl = "http://localhost:8080/src/assets/namsa-logo.png"; // Same logo
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png"; // Same logo
         String resubmitLink = "https://api.owellgraphics.com/profile/resubmit"; // Update with your actual resubmission link
 
         String htmlBody =
@@ -53,8 +53,8 @@ public class EmailService {
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #cc0000; margin-top: 0;'>Dear Artist,</h2>" +
-                        "<p style='font-size: 16px; color: #333;'>We regret to inform you that your profile has been <strong>rejected</strong> by the administrator.</p>" +
+                        "<h2 style='color: #cc0000; margin-top: 0;'>Dear Namsa Member,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>We regret to inform you that your profile has been <strong>rejected</strong> by our administrator.</p>" +
 
                         "<p style='font-size: 16px; color: #cc0000;'><strong>Reason:</strong> " + notes + "</p>" +
 
@@ -72,8 +72,8 @@ public class EmailService {
                         "</div>" +
 
                         "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
-                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #cc0000; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #cc0000; text-decoration: none;'>support@namsa.com</a></p>" +
                         "</div>" +
                         "</div>";
 
@@ -94,7 +94,7 @@ public class EmailService {
      */
     public void sendMusicRejectionEmail(String email, String notes) {
         String subject = "Music File Rejection Notification";
-        String logoUrl = "http://localhost:8080/src/assets/namsa-logo.png"; // Ensure no extra spaces
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png"; // Ensure no extra spaces
         String resubmitLink = "https://api.owellgraphics.com/artist/music/resubmit"; // Update with your actual link
 
         String htmlBody =
@@ -104,8 +104,8 @@ public class EmailService {
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #cc0000; margin-top: 0;'>Dear Artist,</h2>" +
-                        "<p style='font-size: 16px; color: #333;'>We regret to inform you that your music submission has been <strong>rejected</strong> by the administrator.</p>" +
+                        "<h2 style='color: #cc0000; margin-top: 0;'>Dear Namsa Member,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>We regret to inform you that your music submission has been <strong>rejected</strong> by our administrator.</p>" +
 
                         "<p style='font-size: 16px; color: #cc0000;'><strong>Reason:</strong> " + notes + "</p>" +
 
@@ -123,8 +123,8 @@ public class EmailService {
                         "</div>" +
 
                         "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
-                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #cc0000; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #cc0000; text-decoration: none;'>support@namsa.com</a></p>" +
                         "</div>" +
                         "</div>";
 
@@ -161,34 +161,34 @@ public class EmailService {
     //simple Profile Approval
     public void sendProfileApprovalEmail(String email) {
         String subject = "Profile Approval Notification";
-        String logoUrl = "http://localhost:8080/src/assets/namsa-logo.png"; // Reuse your logo
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png"; // Reuse your logo
         String dashboardLink = "https://api.owellgraphics.com/dashboard"; // Link to your system (update if needed)
 
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>" +
-                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #9b6de8;'>" +
+                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
                         "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #6a0dad; margin-top: 0;'>Dear Artist,</h2>" +
-                        "<p style='font-size: 16px; color: #333;'>🎉 Congratulations! Your profile has been <strong>approved</strong> by the administrator.</p>" +
+                        "<h2 style='color: #ed7c08; margin-top: 0;'>Dear Namsa Member,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>Congratulations! Your profile has been <strong>approved</strong> by the administrator.</p>" +
                         "<p style='font-size: 16px;'>You can now upload and manage your music files in the system.</p>" +
 
                         "<div style='text-align: center; margin: 30px 0;'>" +
                         "<a href='" + dashboardLink + "' " +
-                        "style='background-color: #8a2be2; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                        "style='background-color: #ed7c08; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
                         "Go to Dashboard" +
                         "</a>" +
                         "</div>" +
 
                         "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link into your browser:</p>" +
-                        "<p style='font-size: 14px; word-break: break-all; color: #8a2be2;'>" + dashboardLink + "</p>" +
+                        "<p style='font-size: 14px; word-break: break-all; color: #ed7c08;'>" + dashboardLink + "</p>" +
                         "</div>" +
 
                         "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
-                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #8a2be2; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #ed7c08; text-decoration: none;'>support@ytnafrica.com</a></p>" +
                         "</div>" +
                         "</div>";
 
@@ -209,34 +209,34 @@ public class EmailService {
      */
     public void sendMusicApprovalEmail(String email) {
         String subject = "Music File Approval Notification";
-        String logoUrl = "http://localhost:8080/src/assets/namsa-logo.png";
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
         String dashboardLink = "https://api.owellgraphics.com/artist/dashboard"; // Link to artist dashboard
 
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f7fff7;'>" +
-                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #4caf50;'>" +
+                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
                         "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #2e7d32; margin-top: 0;'>Dear Artist,</h2>" +
-                        "<p style='font-size: 16px; color: #333;'>🎉 Congratulations! Your music file has been <strong>approved</strong> by the administrator.</p>" +
+                        "<h2 style='color: #ed7c08; margin-top: 0;'>Dear Namsa Member,</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>Congratulations! Your music file has been <strong>approved</strong> by the administrator.</p>" +
                         "<p style='font-size: 16px;'>Your track is now live in the system and available for companies to license and use.</p>" +
 
                         "<div style='text-align: center; margin: 30px 0;'>" +
                         "<a href='" + dashboardLink + "' " +
-                        "style='background-color: #2e7d32; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                        "style='background-color: #ed7c08; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
                         "View Dashboard" +
                         "</a>" +
                         "</div>" +
 
                         "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link:</p>" +
-                        "<p style='font-size: 14px; word-break: break-all; color: #2e7d32;'>" + dashboardLink + "</p>" +
+                        "<p style='font-size: 14px; word-break: break-all; color: #ed7c08;'>" + dashboardLink + "</p>" +
                         "</div>" +
 
                         "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                        "<p>&copy; 2025 Music Royalties System. All rights reserved.</p>" +
-                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #2e7d32; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #2e7d32; text-decoration: none;'>support@ytnafrica.com</a></p>" +
                         "</div>" +
                         "</div>";
 
@@ -263,34 +263,34 @@ public class EmailService {
 
     public void sendVerificationEmail(String email, String token) {
         String subject = "Email Verification";
-        String logoUrl = "http://localhost:8080/src/assets/namsa-logo.png"; // Make sure this URL is accessible
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png"; // Make sure this URL is accessible
         String verificationLink = "https://api.owellgraphics.com/api/auth/verify?token=" + token;
 
         String htmlBody =
                 "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px; background-color: #f9f7ff;'>" +
-                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #9b6de8;'>" +
+                        "<div style='text-align: center; padding-bottom: 20px; border-bottom: 2px solid #ed7c08;'>" +
                         "<img src='" + logoUrl + "' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />" +
                         "</div>" +
 
                         "<div style='padding: 30px; color: #444; line-height: 1.6;'>" +
-                        "<h2 style='color: #6a0dad; margin-top: 0;'>Hello, ytnafrica member!</h2>" +
-                        "<p style='font-size: 16px; color: #333;'>Thank you for registering with <strong>ytnafrica / nascam</strong>.</p>" +
+                        "<h2 style='color: #6a0dad; margin-top: 0;'>Hello, Namsa Member!</h2>" +
+                        "<p style='font-size: 16px; color: #333;'>Thank you for registering with <strong>namsa</strong>.</p>" +
                         "<p style='font-size: 16px;'>To complete your registration, please verify your email address by clicking the button below:</p>" +
 
                         "<div style='text-align: center; margin: 30px 0;'>" +
                         "<a href='" + verificationLink + "' " +
-                        "style='background-color: #8a2be2; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
+                        "style='background-color: #ed7c08; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>" +
                         "Verify Email Address" +
                         "</a>" +
                         "</div>" +
 
                         "<p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the following link into your browser:</p>" +
-                        "<p style='font-size: 14px; word-break: break-all; color: #8a2be2;'>" + verificationLink + "</p>" +
+                        "<p style='font-size: 14px; word-break: break-all; color: #ed7c08;'>" + verificationLink + "</p>" +
                         "</div>" +
 
                         "<div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>" +
-                        "<p>&copy; 2025 YTNAFRICA / NASCAM. All rights reserved.</p>" +
-                        "<p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #8a2be2; text-decoration: none;'>support@ytnafrica.com</a></p>" +
+                        "<p>&copy; 2025 namsa. All rights reserved.</p>" +
+                        "<p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #ed7c08; text-decoration: none;'>support@namsa.com</a></p>" +
                         "</div>" +
                         "</div>";
 
@@ -308,7 +308,7 @@ public class EmailService {
 
     // invoice pdf
     public void sendInvoiceEmail(String clientEmail, Invoice invoice) {
-        String subject = "Invoice Number - " + invoice.getInvoiceNumber() + " - YTNAFRICA ";
+        String subject = "Invoice Number - " + invoice.getInvoiceNumber() + " - NAMSA ";
 
         String htmlBody = buildInvoiceHtml(invoice);
 
@@ -375,7 +375,7 @@ public class EmailService {
                         <tr>
                             <td class="stack" width='50%%' style='vertical-align: top; padding-right: 10px;'>
                                 <strong>From:</strong><br/>
-                                <strong>YTNAfrica / NASCAM</strong><br/>
+                                <strong>NAMSA</strong><br/>
                                 %s<br/>
                                 Phone: %s<br/>
                                 Email: %s<br/>
@@ -427,8 +427,8 @@ public class EmailService {
 
                     <!-- Footer -->
                     <div style='text-align: center; padding: 15px; color: #777; font-size: 13px; border-top: 1px solid #eee; margin-top: 20px;'>
-                        <p>&copy; 2025 ytnafrica. All rights reserved.</p>
-                        <p>If you have questions, contact <a href='mailto:support@ytnafrica.com' style='color: #8a2be2;'>support@ytnafrica.com</a></p>
+                        <p>&copy; 2025 namsa. All rights reserved.</p>
+                        <p>If you have questions, contact <a href='mailto:support@namsa.com' style='color: #8a2be2;'>support@namsa.com</a></p>
                     </div>
                 </div>
             </div>
@@ -468,7 +468,7 @@ public class EmailService {
     //send email for payments
     // artist payment pdf
     public void sendPayment(String artistEmail, ArtistInvoiceReports artistInvoice) {
-        String subject = "Payment Report - " + artistInvoice.getPaymentId() + " - YTNAFRICA ";
+        String subject = "Payment Report - " + artistInvoice.getPaymentId() + " - NAMSA ";
 
         String htmlBody = buildArtistPaymentHtml(artistInvoice);
 
@@ -520,7 +520,7 @@ public class EmailService {
                     <tr>
                         <td class="stack" width='50%%' style='vertical-align: top; padding-right: 10px;'>
                             <strong>From:</strong><br/>
-                            <strong>YTNAfrica / NASCAM</strong><br/>
+                            <strong>NAMSA</strong><br/>
                             %s<br/>
                             Phone: %s<br/>
                             Email: %s<br/>
@@ -572,8 +572,8 @@ public class EmailService {
 
                 <!-- Footer -->
                 <div style='text-align: center; padding: 15px; color: #777; font-size: 13px; border-top: 1px solid #eee; margin-top: 20px;'>
-                    <p>&copy; 2025 ytnafrica. All rights reserved.</p>
-                    <p>If you have questions, contact <a href='mailto:support@ytnafrica.com' style='color: #8a2be2;'>support@ytnafrica.com</a></p>
+                    <p>&copy; 2025 namsa. All rights reserved.</p>
+                    <p>If you have questions, contact <a href='mailto:support@namsa.com' style='color: #8a2be2;'>support@namsa.com</a></p>
                 </div>
             </div>
         </div>
@@ -606,7 +606,7 @@ public class EmailService {
     //Section to send and Implement forgot Password
     public void sendPasswordResetEmail(String email, String token) {
         String subject = "Password Reset Request";
-        String logoUrl = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+        String logoUrl = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
         String resetLink = "http://localhost:3000/auth/reset-password?token=" + token; // Frontend URL
         // If you don't have a frontend yet, you can point to a temporary endpoint later
 
@@ -616,21 +616,21 @@ public class EmailService {
                 <img src='%s' alt='YTN Africa Logo' style='height: 60px; object-fit: contain;' />
             </div>
             <div style='padding: 30px; color: #444; line-height: 1.6;'>
-                <h2 style='color: #6a0dad; margin-top: 0;'>Password Reset</h2>
+                <h2 style='color: #ed7c08; margin-top: 0;'>Password Reset</h2>
                 <p style='font-size: 16px; color: #333;'>You requested a password reset. Click the button below to set a new password.</p>
                 <div style='text-align: center; margin: 30px 0;'>
                     <a href='%s' 
-                       style='background-color: #8a2be2; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>
+                       style='background-color: #ed7c08; color: white; padding: 14px 28px; text-decoration: none; font-size: 16px; border-radius: 6px; display: inline-block; font-weight: bold;'>
                        Reset Password
                     </a>
                 </div>
                 <p style='font-size: 14px; color: #666;'>If the button doesn't work, copy and paste the link below:</p>
-                <p style='font-size: 14px; word-break: break-all; color: #8a2be2;'>%s</p>
+                <p style='font-size: 14px; word-break: break-all; color: #ed7c08;'>%s</p>
                 <p style='font-size: 14px; color: #999; margin-top: 20px;'>This link expires in 1 hour.</p>
             </div>
             <div style='text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; color: #999; font-size: 13px;'>
-                <p>&copy; 2025 Music Royalties System. All rights reserved.</p>
-                <p>For support, contact us at <a href='mailto:support@ytnafrica.com' style='color: #8a2be2; text-decoration: none;'>support@ytnafrica.com</a></p>
+                <p>&copy; 2025 namsa. All rights reserved.</p>
+                <p>For support, contact us at <a href='mailto:support@namsa.com' style='color: #ed7c08; text-decoration: none;'>support@namsa.com</a></p>
             </div>
         </div>
         """.formatted(logoUrl, resetLink, resetLink);

@@ -23,7 +23,7 @@ import java.math.RoundingMode;
 @Service
 public class PdfGenForArtistService {
 
-    private static final String LOGO_URL = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+    private static final String LOGO_URL = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
 
     public byte[] generatePdf(ArtistInvoiceReports artistinvoice) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

@@ -22,7 +22,7 @@ import java.math.RoundingMode;
 @Service
 public class PdfInvoiceGenerator {
 
-    private static final String LOGO_URL = "https://ytnafrica.ggff.net/images/ytnlogo.png";
+    private static final String LOGO_URL = "https://namsa.vercel.app/assets/namsa-logo-BGptgL6M.png";
 
     public byte[] generatePdf(Invoice invoice) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -57,7 +57,7 @@ public class PdfInvoiceGenerator {
             // FROM (Sender)
             Cell fromCell = new Cell().setBorder(null);
             fromCell.add(new Paragraph("From:").setBold());
-            fromCell.add(new Paragraph("YTNAfrica / NASCAM"));
+            fromCell.add(new Paragraph("NAMSA"));
             fromCell.add(new Paragraph(invoice.getCompanyAddress()));
             fromCell.add(new Paragraph("Phone: " + invoice.getCompanyPhone()));
             fromCell.add(new Paragraph("Email: " + invoice.getCompanyEmail()));
@@ -128,7 +128,7 @@ public class PdfInvoiceGenerator {
             document.add(new Paragraph(
                     "1. Payment is due within 15 days of the invoice date.\n" +
                             "2. Late payments may be subject to a finance charge.\n" +
-                            "3. All services are provided as per the agreement between YTNAfrica / NASCAM and the client.\n" +
+                            "3. All services are provided as per the agreement between NAMSA / NASCAM and the client.\n" +
                             "4. This invoice is valid for payment upon approval of the associated music royalty usage."
             ).setFontSize(10).setFontColor(ColorConstants.GRAY));
 
