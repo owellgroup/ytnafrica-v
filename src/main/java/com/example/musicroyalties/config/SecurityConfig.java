@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/proofofpayment/view/**").permitAll()
                         .requestMatchers("/api/bankconfirmationletter/view/**").permitAll()
                         .requestMatchers("/api/iddocument/view/**").permitAll()
-                        .requestMatchers("/api/music/view/**").permitAll()
+                        .requestMatchers("/api/music/view/**", "/api/statuses/**").permitAll()
                         .requestMatchers("/api/invoices/**", "/api/legalentity/**", "/api/naturalperson/**").permitAll()
                         .anyRequest().authenticated()
                 )
