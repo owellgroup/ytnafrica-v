@@ -28,4 +28,14 @@ public class StatusService {
     public void deleteStatus(Long id) {
         statusRepository.deleteById(id);
     }
+    public Status updateStatus(Long id, Status updatedStatus) {
+        return statusRepository.findById(id)
+                .map(existingStatus -> {
+                    existingStatus.setStatus(updatedStatus.getStatus());
+                    return statusRepository.save(existingStatus);
+                })
+                .orElseThrow(() -> new RuntimeException("Status not found with id " + id));
+    }
+
+
 }

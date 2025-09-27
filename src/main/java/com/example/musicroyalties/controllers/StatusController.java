@@ -32,4 +32,10 @@ public class StatusController {
     public void deleteStatus(@PathVariable Long id) {
         statusService.deleteStatus(id);
     }
+
+    @PutMapping("/{id}")
+    public Status updateStatus(@PathVariable Long id, @RequestBody Status status) {
+        return statusService.updateStatus(id, status);
+    }
+
 }
