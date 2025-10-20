@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/company")
 @CrossOrigin(origins = "*")
-@PreAuthorize("hasRole('COMPANY')")
+@PreAuthorize("hasAnyRole('ADMIN', 'COMPANY', 'ARTIST')")
 public class CompanyController {
     
     @Autowired
