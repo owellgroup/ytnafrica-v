@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/invoices")
 @CrossOrigin(origins = "*")
-@PreAuthorize("hasRole('ADMIN')")
+
 public class InvoiceController {
 
     @Autowired
