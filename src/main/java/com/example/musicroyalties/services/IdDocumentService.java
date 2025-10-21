@@ -42,7 +42,7 @@ public class IdDocumentService {
         Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
         Files.copy(file.getInputStream(), filePath);
         
-        String fileUrl = "https://api.owellgraphics.com/api/iddocument/view/" + fileName;
+        String fileUrl = "https://api.owellserver.ggff.net/api/iddocument/view/" + fileName;
         IdDocument document = new IdDocument();
         document.setFileType(file.getContentType());
         document.setFileUrl(fileUrl);
@@ -115,7 +115,7 @@ public class IdDocumentService {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
             Files.copy(file.getInputStream(), filePath);
             
-            String fileUrl = "https://api.owellgraphics.com/api/iddocument/view/" + fileName;
+            String fileUrl = "https://api.owellserver.ggff.net/api/iddocument/view/" + fileName;
             document.setFileType(file.getContentType());
             document.setFileUrl(fileUrl);
         }
