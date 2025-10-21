@@ -42,7 +42,7 @@ public class BankConfirmationLetterService {
         Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
         Files.copy(file.getInputStream(), filePath);
         
-        String fileUrl = "https://api.owellgraphics.com/api/bankconfirmationletter/view/" + fileName;
+        String fileUrl = "https://api.owellserver.ggff.net/api/bankconfirmationletter/view/" + fileName;
         BankConfirmationLetter document = new BankConfirmationLetter();
         document.setFileType(file.getContentType());
         document.setFileUrl(fileUrl);
@@ -121,7 +121,7 @@ public class BankConfirmationLetterService {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
             Files.copy(file.getInputStream(), filePath);
             
-            String fileUrl = "https://api.owellgraphics.com/api/bankconfirmationletter/view/" + fileName;
+            String fileUrl = "https://api.owellserver.ggff.net/api/bankconfirmationletter/view/" + fileName;
             document.setFileType(file.getContentType());
             document.setFileUrl(fileUrl);
         }
