@@ -42,7 +42,7 @@ public class PassportPhotoService {
         Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
         Files.copy(file.getInputStream(), filePath);
         
-        String fileUrl = "https://api.owellgraphics.com/api/passportphoto/view/" + fileName;
+        String fileUrl = "https://api.owellserver.ggff.net/api/passportphoto/view/" + fileName;
         PassportPhoto photo = new PassportPhoto();
         photo.setFileType(file.getContentType());
         photo.setImageUrl(fileUrl);
@@ -115,7 +115,7 @@ public class PassportPhotoService {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
             Files.copy(file.getInputStream(), filePath);
             
-            String fileUrl = "https://api.owellgraphics.com/api/passportphoto/view/" + fileName;
+            String fileUrl = "https://api.owellserver.ggff.net/api/passportphoto/view/" + fileName;
             photo.setFileType(file.getContentType());
             photo.setImageUrl(fileUrl);
         }
