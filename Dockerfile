@@ -36,7 +36,7 @@ RUN chown -R springuser:springuser /app
 USER springuser
 
 # Expose the same port as in application.properties
-EXPOSE 8484
+EXPOSE 8080
 
 # Environment variables (can be overridden at runtime)
 ENV SPRING_PROFILES_ACTIVE=prod
